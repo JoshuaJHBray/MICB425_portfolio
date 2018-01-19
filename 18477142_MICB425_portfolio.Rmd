@@ -1,0 +1,6 @@
+---
+title: "MICB425 portfolio"
+author: "Joshua Bray (18477142)"
+date: "January 19, 2018"
+output: html_document
+---
