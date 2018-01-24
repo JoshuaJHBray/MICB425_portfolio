@@ -7,4 +7,11 @@ output:
     toc: yes
 ---
 
+#Assignments
+
+##Data Science Friday
+
+```{r child = "DS_assignment3.rmd"}
+
+```
 
