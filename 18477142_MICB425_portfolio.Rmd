@@ -1,5 +1,5 @@
 ---
-title: "Portfolio"
+title: "MICB425_Portfolio"
 author: "Joshua Bray (18477142)"
 date: "version `r format(Sys.time(), '%B %d, %Y')`"
 output: 
@@ -7,11 +7,392 @@ output:
     toc: yes
 ---
 
-#Assignments
+# Module 01
 
-##Data Science Friday
+## Module 01 portfolio check
+
+* Installation check
+    + Completion status:
+    + Comments:
+* Portfolio repo setup
+    + Completion status: 
+    + Comments:
+* RMarkdown Pretty html Challenge
+    + Completion status:
+    + Comments:
+* Evidence worksheet_01
+    + Completion status:
+    + Comments:
+* Evidence worksheet_02
+    + Completion status:
+    + Comments:
+* Evidence worksheet_03
+    + Completion status:
+    + Comments:
+* Problem Set_01
+    + Completion status:
+    + Comments:
+* Problem Set_02
+    + Completion status:
+    + Comments:
+* Writing assessment_01
+    + Completion status:
+    + Comments:
+* Additional Readings
+    + Completion status:
+    + Comments  
+    
+## Data science Friday  
+
+### Installation check
+
+![**Figure 1.** Windows Git Bash Terminal](20180111_joshbray_GitBash.jpg)  
+
+![**Figure 2.** R Studio](20180110_joshbray_RStudio.jpg)
+
+![**Figure 3.** Github Homepage](20180111_joshbray_Github.jpg)
+
+
+
+### Portfolio repo setup
+
+
+**Creating a directory for my portfolio in my documents folder**
+
+First of all, create the folder using the following command in Git Bash:  
+
+*mkdir MICB425_portfolio*
+
+Then create a repository on GitHub titled *MICB425_portfolio* but do not initialize it with README, gitignore, or license files  
+
+**Initializing the portfolio repo**
+
+Return to Git Bash and change the directory to *MICB425_portfolio*
+
+Then use the following command to initialize it:
+
+*git init*
+
+**Pushing files to GitHub**
+
+First, use the following command to add all items within the directory to the index:
+
+*git add .*
+
+Then, commit the files to the repo using the following command, with the text in quotations used to annotate the commit:  
+
+*git commit -m *"blah blah blah"
+
+Next, use the URL from the GitHub GUI Webpage where the repo was started in the following command:
+
+*git remote add origin https://remote_repository_URL*
+
+Finally, push the repo to GitHub:
+
+*git push -u origin master*
+
+**Adding files to my GitHub repository**
+
+To add files, use the add, commit, and push commands as follows:
+
+*git add .* Note: Replace the period with the file name to only add the one file and not the whole directory
+
+*git commit -m* "Blah Blah Blah"
+
+*git push*
+
+### RMarkdown pretty html challenge
 
 ```{r child = "DS_assignment3.rmd"}
 
 ```
 
+### Plotting data in R
+
+####Exercise 1
+
+*SiO2 vs Depth, with purple triangles*  
+ggplot(metadata, aes(x=SiO2_uM, y=Depth_m)) +  
+  geom_point(color="purple", shape=17)
+
+![](18477142_ggplot_Exercise1.jpeg)
+
+####Exercise 2
+
+ *Temperature_F vs Depth_m*  
+metadata %>%  
+  mutate(Temperature_F = Temperature_C*9/5+32) %>%  
+    ggplot(aes(x=Temperature_F, y=Depth_m)) +  
+      geom_point()  
+
+![](18477142_ggplot_Exercise2.jpeg)
+
+
+####Exercise 3
+
+
+Unable to load phyloseq data? Code used is shown with errors.
+
+source("https://bioconductor.org/biocLite.R")  
+biocLite("phyloseq", type = "source")
+
+library(phyloseq)  *At this point, phyloseq has been installed and can be seen in the packages tab*
+
+load("phyloseq_object.RData")
+
+*Get the following error trying to carry this out.*
+  
+Error in readChar(con, 5L, useBytes = TRUE) : cannot open the connection
+In addition: Warning message:  
+In readChar(con, 5L, useBytes = TRUE) :
+cannot open compressed file 'phyloseq_object.RData', probable reason 'No such file or directory'    
+*Likely cause is improper installation of phyloseq, but I have repeated it with a fresh workspace to no avail*  
+
+Tried to figure out the code needed to generate the figure anyways, but could not run it to see if it works.
+
+plot_bar(physeq_percent, fill="Class") +  
+  geom_bar(aes(fill=Class), stat="identity") +  
+  labs(x="Sample Depth", y="Percent relative abundance") +  
+  title="Class from 10 to 200 m in Saanich Inlet"  
+
+####Exercise 4
+
+metadata %>%   
+  gather(Nutrient, uM, NH4_uM, NO2_uM, NO3_uM, O2_uM, PO4_uM, SiO2_uM) %>%   
+  ggplot(aes(x=Depth_m, y=uM))+  
+  geom_point() +  
+  geom_line() +  
+  facet_wrap(~Nutrient, scales="free_y") +  
+  theme(legend.position="none")  
+
+![](18477142_ggplot_Exercise4.jpeg)
+
+## Origins and Earth Systems
+### Evidence worksheet 01 
+
+[Whitman *et al* 1998](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC33863/)
+
+#### Learning objectives
+Describe the numerical abundance of microbial life in relation to ecology and biogeochemistry of Earth systems. 
+
+#### General questions
+* What were the main questions being asked?  
+    * What is the total amount of prokaryotes on Earth and how much C/N/P do they contain?
+    * How does the carbon in prokaryotes impact global biogeochemical models like the carbon cycle?
+    * What is the diversity/mutation rate due to the number of prokaryotes?
+    * What is the abundance of prokaryotic life in various habitats on Earth?  
+
+* What were the primary methodological approaches used?  
+    Estimates of cell density for various environments extrapolated out to the global-biotic number of cells.
+    They used literature to find the values to use for each of the environments.
+
+* Summarize the main results or findings.  
+    The total carbon taken up by prokaryotes is 60-100% of the total carbon taken up by plants and prokaryotes contain 10-fold more nutrients than plants. Also, the highest cellular productivity is found in the open ocean, therefore mutations and other rare genetic events are more likely to appear in marine populations than others. Finally, the subsurface-turnover time is far longer than found in other ecosystems.
+
+* Do new questions arise from the results?  
+    A few examples of new questions are as follows:
+    * What is the cause and effect of the extraordinary long turnover time in subsurface prokaryotes?
+    * How should species definitions be defined in context of prokaryotes vs. eukaryotes
+    * How does the population of bacteria compare to that of archaea?
+    * How does global climate change impact these estimates? 
+
+* Were there any specific challenges or advantages in understanding the paper (*e.g.* did the authors provide sufficient background information to understand experimental logic, were methods explained adequately, were any specific assumptions made, were conclusions justified based on the evidence, were the figures or tables useful and easy to understand)?  
+  The assumptions regarding population density were well described, and the extrapolations to the whole global-biome populations seem justified, but there were some calculations that did not make sense. Specifically, the carbon content, efficiency, and turnover time calculations seemed to use values that did not have supporting evidence. Also, there were so many assumptions that it made it hard to truly follow what was really true or simply a hypothetical. The tables were laid out really well though, with all values displayed and not just the *total* values for each biome.
+
+### Evidence Worksheet 02
+#### Learning Objectives:  
+Comment on the emergence of microbial life and the evolution of Earth systems
+
+#### Specific Questions:
+
+* Indicate the key events in the evolution of Earth systems at each approximate moment in the time series. If times need to be adjusted or added to the timeline to fully account for the development of Earth systems, please do so.  
+
+Hadean  
+4.6 GA: Solar system formed, inner planets received water vapor and carbon 
+4.5 GA: Moon formed and gave Earth spin and tilt, day/night cycle, and seasons  
+4.5 GA – 4.1 GA: High levels of CO2 increased temperature during times of the weak early sun.  
+4.4 GA: Zircon formation: oldest mineral  
+4.4 GA – 4.1 GA: meteorite impacts  
+4.1 GA: Evidence of life in zircon and from carbon isotopes  
+4 GA: Oldest rock: Acasta gneiss and evidence of plate subduction  
+
+Archaean    
+3.8 GA: Existence of life: from sedimentary rocks and methanogenesis  
+3.5 GA: Microfossils and stromatolites present  
+3.5 GA – 2.7GA: Cyanobacteria photosynthesize  
+2.7 GA: Great oxidation event: responsible for glaciation  
+
+Proterozoic  
+2.5 GA – 1.5 GA: red rock beds observed: evidence of oxidation  
+1.7 GA: Eukaryotes appear  
+1.1 GA: Snowball Earth occurs  
+
+Phanerozoic  
+540 MA: Cambrian explosion: increased diversity of life and larger organisms  
+Land plants observed  
+250 MA: Permian extinction: 95% species extinct  
+Gigantism of organisms  
+65 MA: Cretaceous/Paleogene Extinction  
+
+* Describe the dominant physical and chemical characteristics of Earth systems at the following waypoints: 
+    + Hadean  
+There was a lot of CO2 to keep the Earth warm, as the sun was weak back then.
+Earth was mostly molten rock and very hot
+
+    + Archean  
+Atmosphere was filled with CH4 to keep the Earth warm still.
+As photosynthesis evolved, some O2 was present
+
+    + Precambrian  
+    
+    + Proterozoic  
+O2 reacted with atmospheric methane to produce CO2
+This caused a net decrease in greenhouse gas effects, making earth cold and leading to glaciation. Oxygen on Earth started oxidizing iron into banded iron formations, seen in sedimentary rock.
+
+    - Phanerozoic  
+Increased oxygenation of the atmosphere
+Plants started to evolve and can be seen on Earth. 
+Coal deposits developed as organisms died in extinctions and were stored in sediments
+There was the occasional glaciation periods
+
+### Problem set 01
+#### Learning objectives: 
+Describe the numerical abundance of microbial life in relation to the ecology and biogeochemistry of Earth systems.
+
+#### Specific questions:
+* What are the primary prokaryotic habitats on Earth and how do they vary with respect to their capacity to support life? Provide a breakdown of total cell abundance for each primary habitat from the tables provided in the text. 
+
+  **Aquatic -** The majority of prokaryotic life in aquatic environments is found in the open ocean. They have a short turnover time and therefore a high cellular productivity, which means that mutations and other rare genetic events are most likely to occur here than other habitats.
+  
+  Total abundance: 1.180x10^29
+
+  **Soil -** Major reservoir of organic carbon; prokaryotes are essential in soil decomposition
+
+  Total abundance: 2.556 x 10^29
+
+  **Subsurface -** Major habitat for prokaryotes, with most of the subsurface biomass supported by organic matter deposited from the surface.
+
+  Total abundance: 3.8 x 10^30
+
+
+* What is the estimated prokaryotic cell abundance in the upper 200 m of the ocean and what fraction of this biomass is represented by marine cyanobacterium including Prochlorococcus? What is the significance of this ratio with respect to carbon cycling in the ocean and the atmospheric composition of the Earth?  
+
+  Upper 200m of the ocean: 3.6x10^28
+  Density: 5x10^5 cells/mL
+
+  Fraction represented by cyanobacterium including Prochlorococcus: 
+
+  4x10^4 cells/ml/5x10^5 cells x 100 = 8%
+
+  Marine cyanobacterium such as Prochlorococcus produce their own energy from sunlight via photosynthesis, which in the process produces oxygen while fixing carbon. Despite only being 8% of the prokaryotic cell abundance in the upper 200m, they are responsible for approximately 50% of the oxygen in the atmosphere and contribute greatly to carbon cycling as demonstrated by their quick turnover time and resulting 8.2 x 10^29 cells/year
+
+* What is the difference between an autotroph, heterotroph, and a lithotroph based on information provided in the text?  
+
+  Autotrophs: in this text are bacteria that produce their own food, primarily using energy from the sun. As a result, these are prokaryotes that are often found on surface environments that are able to receive some amount of sunlight. They are <10% of upper layer marine prokaryotes. However, they form the majority of prokaryotes in soil and subsurface? Thus, they are defined as primarily land-dwelling organisms.
+  “Self-nourishing”, fix inorganic carbon (CO2) → Biomass
+
+  Heterotrophs: make up the majority of prokaryotic organisms with the majority, assimilate organic carbon. Of those found below 200m, they are defined as the most abundant sea-dwelling organisms.
+
+  Lithotrophs: are subsurface prokaryotes that use a different method of energy generation. They are defined as mysterious, primarily found in subsurface environments, and are scarcer than other types of prokaryotes. Use inorganic substrates.
+
+* Based on information provided in the text and your knowledge of geography what is the deepest habitat capable of supporting prokaryotic life? What is the primary limiting factor at this depth?  
+
+  The Mariana Trench is the deepest part of the ocean, and we know that it is an environment that supports prokaryotic life, although at this depth, there is nearly no light reaching it as well. Therefore, it is the deepest habitat known to support life. Because the paper has deduced that subsurface sediments below the water layer also contains prokaryotes, we could make the argument that the deepest habitat to host prokaryotic life would be the subsurface sediment layer of the Trench. Subsurface environments on land may contain prokaryotes further below that of the Mariana Trench. However, not much is currently known about life existing below these depths, due to challenges in retrieving uncontaminated samples from these areas. The text talks about how in subsurface environments, the limited carbon nutrition available to these organisms means that the majority are metabolically inactive or non-viable. However, evidence shows that metabolic activity is on par with that of surface prokaryotes. Because most of the carbon nutrient availability is gained from the surface, the primary limiting factor would be the transfer of carbon nutrients from surface to deeper subsurface environments, which logically decreases the deeper you go.
+
+  * Subsurface (marine=10,994 m -> 10.9 km deep? + can go down another 4-5 km depending on temperature) = deepest habitat, subsurface: limiting factor is temperature: 
+  * Change in temperature as getting deeper is about 22 ˚C/km
+
+* Based on information provided in the text your knowledge of geography what is the highest habitat capable of supporting prokaryotic life? What is the primary limiting factor at this height?  
+
+  Prokaryotes have been found in in the atmosphere at altitudes as high as 57-77 km. Mount Everest (8,848 meters, 8.8 km) is the highest geographical location on Earth, and therefore would technically be the highest habitat capable of supporting prokaryotic life. Is it capable of supporting prokaryotic life? Primary limiting factors at this height include temperature. Some prokaryotes, psychrophiles, have adapted to such low temperatures. Nutrients are also limited at high altitude. Less atoms are found in the upper atmosphere and thus less material is available to compose the building blocks of life. This would result in slower growth. UV radiation as well as pressure are limiting to life at high altitudes because they can damage cells.
+
+* Based on estimates of prokaryotic habitat limitation, what is the vertical distance of the Earth’s biosphere measured in km?  
+
+Lower range:				
+  * Mariana Trench is 10,994 meter deep, but the lower limit is much deeper since it includes subsurface sediments, which is about 4.5km deeper.
+
+Upper limit:
+  * Mount Everest 8,848 m high, but the upper limit is much higher if it includes atmosphere as an “habitat”.
+
+Vertical distance of the Earth’s biosphere: 
+  19.84 km + 4.5km = 24km (+ potential atmosphere)
+
+* How was annual cellular production of prokaryotes described in Table 7 column four determined? (Provide an example of the calculation)  
+
+  Annual cellular production, in cells/year X 10^29 was calculated with the following formula:
+    Cells/year = Population Size * (365 / (turnover time [days]))
+
+* What is the relationship between carbon content, carbon assimilation efficiency and turnover rates in the upper 200m of the ocean? Why does this vary with depth in the ocean and between terrestrial and marine habitats?  
+
+  Carbon content along with carbon assimilation efficiency determine the upperbound limit on the turnover rates seen in the upper 200m of the ocean. This varies with depth in the ocean, and between terrestrial and marine habitats because the abundance of carbon in each habitat is different.
+
+  Carbon efficiency: 20%
+    20 fg of C on avg in prokaryotic cell (20 fg/cell)
+    ~20 = 20*10^-30 Pg/cell
+    (3.6 X 10^28 cells) x (10^-30 Pg/cell) = 0.72 Pg C in marine heterotrophs
+
+    51 Pg cell/year      85% consumed = 43 Pg C
+    (43 Pg cell/year)/2.88 Pg/year = 14.9 turnovers/year, 1 turnover every 24.1 days 
+    [365 days /14.9 turnovers = ~24 days / turnover] 
+
+
+* How were the frequency numbers for four simultaneous mutations in shared genes determined for marine heterotrophs and marine autotrophs given an average mutation rate of 4 x 10^-7^ per DNA replication? (Provide an example of the calculation with units. Hint: cell and generation cancel out)  
+
+  ((365d/y)*(24h/d)/(((4*10^-7)^4 mutations/cell))*(8.2*10^29 cells/y)=(h/4 simultaneous mutations)
+
+    = 4x10^-7 mutations/generation
+  For 4 mutations to happen at once:
+    (4x10^-7)^4 = 2.56x10^-26 mutations/generation
+    (3.1x 10^28 cells) x 22.8 = 8.2 X 10^29 cells/yr
+    365 /  16  = 22.8 turnover/yr
+    (8.2 x 10^ 29 cells/ yr) x 2.56 x 10^26 mutations/yr = 2.1 X 10^4 mutations/ yr
+
+* Given the large population size and high mutation rate of prokaryotic cells, what are the implications with respect to genetic diversity and adaptive potential? Are point mutations the only way in which microbial genomes diversify and adapt?  
+
+  A large mutation rate means that there is a great potential for multiple point mutations in a single replication. This allows for quick adaptation by creating a more diverse pool of mutants to be selected from. Genetic diversity will be extremely high when small scale changes to sequence are considered and long term "species" level biodiversity will mostly be determined by competition and environmental pressures. Horizontal gene transfer can allow new genes to proliferate in a microbial community assuming the gene is successful in the organism is "born" in.
+
+* What relationships can be inferred between prokaryotic abundance, diversity, and metabolic potential based on the information provided in the text? 
+
+  High abundance allows for high diversity by increasing the potential for mutations and simultaneous mutations. Metabolic potential is dependent on both abundance and diversity. Diversity determines the pool of available genes to be used in metabolic pathways and abundance determines the magnitude of the effect of these pathways.
+  
+### Problem set_02 “Microbial Engines”
+#### Learning objectives: 
+Discuss the role of microbial diversity and formation of coupled metabolism in driving global biogeochemical cycles.
+
+#### Specific Questions:
+* What are the primary geophysical and biogeochemical processes that create and sustain conditions for life on Earth? How do abiotic versus biotic processes vary with respect to matter and energy transformation and how are they interconnected?
+
+Geophysical - Geothermal processes, diagenesis, tectonics, erosion, mountain building, atmosphere  
+Biogeochemical - Microbial catalyzed redox reactions (photosynthesis, fermentation, etc.)  
+
+The abiotic processes recycle matter from the earth to be used by biotic processes, which then use the matter to create energy and pass the products of their metabolism on to other biotic processes to use. The final end products, like CO2 and CH4, are released into the atmosphere to be recycled by the abiotic processes. 
+
+* Why is Earth's redox state considered an emergent property?
+
+The feedback between microbial evolution and biogeochemical processes has created Earth's current redox state. Every process is linked and interconnected.   
+
+* How do reversible electron transfer reactions give rise to element and nutrient cycles at different ecological scales? What strategies do microbes use to overcome thermodynamic barriers to reversible electron flow?  
+
+Cycles can be oxidative or reductive, yet they all feed the end products into new reactions, creating cycles. 
+Strategies: 
+- methanogenic Archaea reduce CO2 with H2, but require high enough H+ tension for the reaction to proceed forward, otherwise it will proceed in reverse. Certain species of methanogens utilize the unfavourable reverse reaction through the synergistic cooperation with H2 consuming sulfate reducers.
+
+* Using information provided in the text, describe how the nitrogen cycle partitions between different redox niches and microbial groups. Is there a relationship between the nitrogen cycle and climate change?   
+
+The only biological process that makes N2 available for biomolecule synthesis is nitrogen fixation, a reductive process that transforms N2 to NH4+. This process is catalyzed by nitrogenase and inhibited by O2. 
+O2 present - NH4+ oxidized to nitrate in two-stage pathway requiring one group of microbes to oxidize ammonia to NO2-, which is subsequently oxidized to NO3- by a different niche of microbes. 
+O2 absent - a different microbial group uses NO2- and NO3- as e- acceptors in the anaerobic oxidation of organic matter, ultimately forming N2.  
+There is a link between the nitrogen cycle and climate change, for without the available nitrogen provided by the nitrogen cycle life would not have been able to evolve the pathways required for oxidative phosphorylation, which has driven major geological climate changes throughout earth's history. 
+
+* What is the relationship between microbial diversity and metabolic diversity and how does this relate to the discovery of new protein families from microbial community genomes?  
+
+While horizontal gene flow has distributed many families of genes, there still exists metabolic diversity amongst microbial communities. For example, chlorophyll-based photosynthesis is restricted to bacteria while methanogenesis is restricted to archaea. The discovery of new protein families is increasing linearly with the number of new genomes sequenced.
+
+* On what basis do the authors consider microbes the guardians of metabolism?  
+
+Due to the glacial periods of earth's history, life was restricted to tiny pockets of microbiall-habital patches, where the metabolic pathways remained protected. Since the metabolic mechanisms have been horizontally transfered to every species on earth, individual taxonomic units can go extinct while the core metabolic machines carry on unperturbed.
+  
+  
+### Module 01 references
+
+Whitman WB, Coleman DC, and Wiebe WJ. 1998. Prokaryotes: The unseen majority. Proc Natl Acad Sci USA. 95(12):6578–6583.  [PMC33863](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC33863/)
