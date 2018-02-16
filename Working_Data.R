@@ -69,13 +69,7 @@ metadata = read.table(file="Saanich.metadata.txt", header=TRUE, row.names=1, sep
 OTU = read.table(file="Saanich.OTU.txt", header=TRUE, row.names=1, sep="\t", na.strings="nan")
 
 #load phyloseq data
-###THIS DOES NOT WORK?! 
 load("phyloseq_object.RData")
-
-#Error in readChar(con, 5L, useBytes = TRUE) : cannot open the connection
-#In addition: Warning message:
-#  In readChar(con, 5L, useBytes = TRUE) :
-# cannot open compressed file 'phyloseq_object.RData', probable reason 'No such file or directory'
 
 #Dot plots
 ggplot(metadata, aes(x=O2_uM, y=Depth_m)) +
@@ -102,8 +96,6 @@ metadata %>%
       geom_point()
 
 #ggplot with phyloseq
-  ##Cannot do, do not have "phyloseq_object.RData"
-  ##Added correct code anyways
 
 #Plot phylum communites by depth
 plot_bar(physeq, "Phylum")
@@ -119,8 +111,9 @@ plot_bar(physeq_percent, fill="Phylum") +
 #Exercise 3
 plot_bar(physeq_percent, fill="Class") + 
   geom_bar(aes(fill=Class), stat="identity") +
-  labs(x="Sample Depth", y="Percent relative abundance") +
-  title="Class from 10 to 200 m in Saanich Inlet"
+  labs(x="Sample Depth", y="Percent relative abundance")
+  
+physeq_percent = transform_sample_counts(physeq, function(x) 100 * x/sum(x))
 
 #Faceting
 plot_bar(physeq_percent, fill="Phylum") +
