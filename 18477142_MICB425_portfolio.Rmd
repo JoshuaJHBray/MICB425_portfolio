@@ -9,39 +9,7 @@ output:
 
 # Module 01
 
-## Module 01 portfolio check
 
-* Installation check
-    + Completion status:
-    + Comments:
-* Portfolio repo setup
-    + Completion status: 
-    + Comments:
-* RMarkdown Pretty html Challenge
-    + Completion status:
-    + Comments:
-* Evidence worksheet_01
-    + Completion status:
-    + Comments:
-* Evidence worksheet_02
-    + Completion status:
-    + Comments:
-* Evidence worksheet_03
-    + Completion status:
-    + Comments:
-* Problem Set_01
-    + Completion status:
-    + Comments:
-* Problem Set_02
-    + Completion status:
-    + Comments:
-* Writing assessment_01
-    + Completion status:
-    + Comments:
-* Additional Readings
-    + Completion status:
-    + Comments  
-    
 ## Data science Friday  
 
 ### Installation check
@@ -157,7 +125,7 @@ metadata %>%
   theme(legend.position="none")
 ```
 
-## Origins and Earth Systems
+## Module 01 Origins and Earth Systems
 ### Evidence worksheet 01 
 
 [Whitman *et al* 1998](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC33863/)
@@ -190,30 +158,33 @@ Describe the numerical abundance of microbial life in relation to ecology and bi
   The assumptions regarding population density were well described, and the extrapolations to the whole global-biome populations seem justified, but there were some calculations that did not make sense. Specifically, the carbon content, efficiency, and turnover time calculations seemed to use values that did not have supporting evidence. Also, there were so many assumptions that it made it hard to truly follow what was really true or simply a hypothetical. The tables were laid out really well though, with all values displayed and not just the *total* values for each biome.
 
 ### Evidence Worksheet 02
+
+[Nisbet & Sleep 2003] (https://www.ncbi.nlm.nih.gov/pubmed/11234022)
+
 #### Learning Objectives:  
 Comment on the emergence of microbial life and the evolution of Earth systems
 
 #### Specific Questions:
 
-* Indicate the key events in the evolution of Earth systems at each approximate moment in the time series. If times need to be adjusted or added to the timeline to fully account for the development of Earth systems, please do so.  
+ *Indicate the key events in the evolution of Earth systems at each approximate moment in the time series. If times need to be adjusted or added to the timeline to fully account for the development of Earth systems, please do so. * 
 
 Hadean  
 4.6 GA: Solar system formed, inner planets received water vapor and carbon 
 4.5 GA: Moon formed and gave Earth spin and tilt, day/night cycle, and seasons  
-4.5 GA – 4.1 GA: High levels of CO2 increased temperature during times of the weak early sun.  
+4.5 GA - 4.1 GA: High levels of CO2 increased temperature during times of the weak early sun.  
 4.4 GA: Zircon formation: oldest mineral  
-4.4 GA – 4.1 GA: meteorite impacts  
+4.4 GA - 4.1 GA: meteorite impacts  
 4.1 GA: Evidence of life in zircon and from carbon isotopes  
 4 GA: Oldest rock: Acasta gneiss and evidence of plate subduction  
 
 Archaean    
 3.8 GA: Existence of life: from sedimentary rocks and methanogenesis  
 3.5 GA: Microfossils and stromatolites present  
-3.5 GA – 2.7GA: Cyanobacteria photosynthesize  
+3.5 GA - 2.7GA: Cyanobacteria photosynthesize  
 2.7 GA: Great oxidation event: responsible for glaciation  
 
 Proterozoic  
-2.5 GA – 1.5 GA: red rock beds observed: evidence of oxidation  
+2.5 GA - 1.5 GA: red rock beds observed: evidence of oxidation  
 1.7 GA: Eukaryotes appear  
 1.1 GA: Snowball Earth occurs  
 
@@ -224,7 +195,7 @@ Land plants observed
 Gigantism of organisms  
 65 MA: Cretaceous/Paleogene Extinction  
 
-* Describe the dominant physical and chemical characteristics of Earth systems at the following waypoints: 
+= *Describe the dominant physical and chemical characteristics of Earth systems at the following waypoints:* 
     + Hadean  
 There was a lot of CO2 to keep the Earth warm, as the sun was weak back then.
 Earth was mostly molten rock and very hot
@@ -244,6 +215,36 @@ Increased oxygenation of the atmosphere
 Plants started to evolve and can be seen on Earth. 
 Coal deposits developed as organisms died in extinctions and were stored in sediments
 There was the occasional glaciation periods
+
+###Evidence Worksheet 03 "The Anthropocene"
+
+[Waters et al. 2016] (https://www.ncbi.nlm.nih.gov/pubmed/26744408)
+
+####Learning objectives: 
+
++	Evaluate human impacts on the ecology and biogeochemistry of Earth systems.
+
+####General Questions:
+
++ *What were the main questions being asked?*
+
+How has humanity affected antrhopogenic markers of functional changes in the Earth system, and how is the Anthropocene distinguished from the Holocene?
+
++ *What were the primary methodological approaches used?*
+
+They reviewed various lines of evidence to track stratigraphic signatures over time. Some of the markers they investigated were standard epoch markers like ice core NO3, Temperatures, CO2 and methane, but they also used novel markers specific to human activity like Plutonium deposition, and concrete and plastic production. They also looked at vertebrate extinction rates.
+
++ *Summarize the main results or findings.*
+
+The stratigraphic signatures they discusses are either completely novel with respect to the Holocene or they are quantitatively outside the range of variation of the Holocene, plus they are accelerating. The exact boundary of the Anthropocene still needs to be figured out but should use their evidence to assist in the decision.
+
++ *Do new questions arise from the results?*
+
+Is it helpful to formalize the Anthropocene, or is it better to leave it as an informal, albeit solidly founded, geological time term, as the Precambrian and Tertiary currently are. 
+
++ *Were there any specific challenges or advantages in understanding the paper (e.g. did the authors provide sufficient background information to understand experimental logic, were methods explained adequately, were any specific assumptions made, were conclusions justified based on the evidence, were the figures or tables useful and easy to understand)?*
+
+There was no methods section, so how the data was being collected was a challenge to follow. It looks like they used references for all of the data, but there are so many references that it makes it hard to validate their findings.
 
 ### Problem set 01
 #### Learning objectives: 
@@ -345,7 +346,7 @@ Vertical distance of the Earth’s biosphere:
 
   High abundance allows for high diversity by increasing the potential for mutations and simultaneous mutations. Metabolic potential is dependent on both abundance and diversity. Diversity determines the pool of available genes to be used in metabolic pathways and abundance determines the magnitude of the effect of these pathways.
   
-### Problem set_02 “Microbial Engines”
+### Problem set_02 Microbial Engines
 #### Learning objectives: 
 Discuss the role of microbial diversity and formation of coupled metabolism in driving global biogeochemical cycles.
 
@@ -382,7 +383,7 @@ While horizontal gene flow has distributed many families of genes, there still e
 
 Due to the glacial periods of earth's history, life was restricted to tiny pockets of microbiall-habital patches, where the metabolic pathways remained protected. Since the metabolic mechanisms have been horizontally transfered to every species on earth, individual taxonomic units can go extinct while the core metabolic machines carry on unperturbed.
   
-### Module 1 Writing Assignment
+### Module 01 Writing Assignment
 
   Microbial life has played a fundamental role in shaping Earth’s biosphere; however, I believe that humanity is more than capable of surviving without the global catalysis and environmental transformation that microbes provide. I will not argue that humanity would be able to adapt and survive following a fantastical, cataclysmic event where only microbial life was extinguished. Rather, I will argue that humanity has the capacity to understand all the biogeochemical processes provided by microbial life with the help of continually-improving computational models. Humanity also has the capacity to understand the influence our own technology has on the global environment, and we can consciously adapt our global actions as necessary to restore order to the global equilibrium. Finally, we can develop new technology to replicate and optimize every biogeochemical process on a global and potentially interplanetary scale. Through these processes, humanity will be capable of controlling and guiding the global environment to ensure the continued survival of our species without relying on evolutionarily-limited, globally-unconscious microbial life.  
     
@@ -433,3 +434,140 @@ Waters, C. N., Zalasiewicz, J., Summerhayes, C., Barnosky, A. D., Poirier, C., G
 
 
 Whitman WB, Coleman DC, and Wiebe WJ. 1998. Prokaryotes: The unseen majority. Proc Natl Acad Sci USA. 95(12):6578–6583.  [PMC33863](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC33863/)
+
+##Module 2 Remapping the Body of the World
+
+###Evidence Worksheet 04
+
+
+####Evidence worksheet_04 "Bacterial Rhodopsin Gene Expression"
+
+
+
+#####Learning objectives: 
+
++	Discuss the relationship between microbial community structure and metabolic diversity
+
++	Evaluate common methods for studying the diversity of microbial communities
+
++	Recognize basic design elements in metagenomic workflows
+
+#####General Questions:
+
++ *What were the main questions being asked?*
+
+The main goal was to more fully describe proteorhodopsin (PR) photosystem genetics and biochemistry. PRs are retinal-containing proteins that catalyze light-activated proton efflux across the cell membrane and are found globally in the ocean's photic zone and in a diverse array of Bacteria and Archaea. 
+What are the minimal heterologous genetic level transfers required for the transfer of the phenotype? 
+
+
+
+
++ *What were the primary methodological approaches used?*
+
+High-density colony macroarrays
+-	Screening for PR expression
+Fosmid library screen
+-	Screened for PR-containing clones on retinal-containing LB agar plating medium
+-	Used a copy-control system that allowed a controlled transition from one copy per cell to multiple (up to 100) vector copies upon addition of the inducer L-arabinose
+HPLC Analysis
+-	For separation of carotenoids
+Proton-Pumping Experiments
+-	Change in pH of a water bath as a result of a clone's proton pump was the detection method
+ATP Production Assays
+-	ATP measured with a luciferase-based assay
+
+
++ *Summarize the main results or findings.*
+
+Took DNA from the environment, created a library out of it, and performed a screen in E. coli for a phenotype with genes it does not normally have.
+-	A powerful way of mining the uncultivated diversity found around the world and using it to engineer microbes to discover the minimal number of genes required to generate a specific phenotype
+
+Discovered that it only required 7 genes to create the PR photosystem phenotype, which is a small enough number of genes that they could easily fit on a single F1 plasmid, enabling extensive horizontal gene transfer
+-	Importantly, it is apparent that the PR photosystem is ubiquitous among diverse microbial taxa
+
++ *Do new questions arise from the results?*
+
+
++ *Were there any specific challenges or advantages in understanding the paper (e.g. did the authors provide sufficient background information to understand experimental logic, were methods explained adequately, were any specific assumptions made, were conclusions justified based on the evidence, were the figures or tables useful and easy to understand)?*
+
+
+### Problem set 03 Metagenomics: Genomic Analysis of Microbial Communities
+```{r child = "18477142_Problem_set_03.rmd"}
+
+```
+
+###Writing Assessment 2
+**CANCELLED**
+
+###Additional Readings
+
+##Module 03 Microbial Species Concepts
+
+###Evidence worksheet_05 "Extensive mosaic structure"
+
+####Part 1: Learning objectives: 
+
++	*Evaluate the concept of microbial species based on environmental surveys and cultivation studies.*
+
++	*Explain the relationship between microdiversity, genomic diversity and metabolic potential*
+
++	*Comment on the forces mediating divergence and cohesion in natural microbial communities*
+
+#####General Questions:
+
++ *What were the main questions being asked?*
+
+To understand the genetic bases for pathogenicity and the evolutionary diversity of E. coli by analyzing the genome sequence of E. coli CFT073, a pathogenic strain isolated from the blood of a woman with acute pyelonephritis and comparing it with the genome sequences of enterohemorrhagic E. coli strain EDL933 and the nonpathogenic laboratory strain MG1655
+
+
++ *What were the primary methodological approaches used?*
+
+They cloned and sequenced an isolated strain of E. coli by using dye-terminator chemistry (Sanger Sequencing). Finishing used sequencing of opposite ends of linking clones, PCR-techniques, and primer walking. 
+
+Sequence analysis and annotation was done with MAGPIE, GLIMMER (to define ORFs), and BLAST.
+
++ *Summarize the main results or findings.*
+
+They generated the complete genome sequence of the uropathogenic E. coli strain CFT073 and compared it to the EDL933 and MG1655 strains, and they found that only 39.2% of their combined set of proteins are common to all three strains. 
+
+The disease potential of CFT073 is reflected in the absence of genes for type 3 secretion system or phage- and plasmid-encoded toxins that is found in some diarrheagenic E. coli. CFT073 is rich in genes for fimbrial adhesins, autotransporters, iron-sequestration systems, and phage-switch recombinases. 
+
+The common core of the backbone has been preserved for generations. Genes within the islands of the backbones are more likely to be horizontally transferred. Overall, survival is preserved vertically but pathogenicity is transferred horizontally. 
+
++ *Do new questions arise from the results?*
+
+"black holes" - genes that are detrimental to a uropathogenic lifestyle that are lost are a challenge to assess due to a lack of sequences to compare to.
+
+What is a species in a microbial world? Should the large differences in overall genome content be part of the definition, or should the definition focus on the backbones which are common?
+
++ *Were there any specific challenges or advantages in understanding the paper (e.g. did the authors provide sufficient background information to understand experimental logic, were methods explained adequately, were any specific assumptions made, were conclusions justified based on the evidence, were the figures or tables useful and easy to understand)? *
+
+It would have been nice if they had presented more data about the other strains they had used (Table 1)
+
+One of the limitations of their analysis is that they only used three strains of e. coli when there are many more strains. With more strains, the overall variance may be less (sampling bias)
+
+####Part 2: Learning objectives: 
+
++	*Comment on the creative tension between gene loss, duplication and acquisition as it relates to microbial genome evolution*
+
++	*Identify common molecular signatures used to infer genomic identity and cohesion*
+
++	*Differentiate between mobile elements and different modes of gene transfer*
+
+##### General Questions
+
+*Based on your reading and discussion notes, explain the meaning and content of the following figure derived from the comparative genomic analysis of three E. coli genomes by Welch et al. Remember that CFT073 is a uropathogenic strain and that EDL933 is an enterohemorrhagic strain. Explain how this study relates to your understanding of ecotype diversity. Provide a definition of ecotype in the context of the human body. Explain why certain subsets of genes in CFT073 provide adaptive traits under your ecological model and speculate on their mode of vertical descent or gene transfer.*
+
+The top half refers to CFT073 and the bottom half refers to EDL933. Each line relates to a gene island, with the size of the line indicating the size of the island and the position along the long representing the position in their genomes. The labels refer to islands that are located at tRNAs. (Asterisks) indicate islands at the same backbone position between both strains
+
+The different strains reside in different environments, which is why there is ecotype diversity.
+
+The common core of the backbone has been preserved for generations. Genes within the islands of the backbone are more likely to be horizontally transferred. Overall, survival is preserved vertically but pathogenicity is transferred horizontally.
+
+### Problem set_04 Fine-scale phylogenetic architecture
+
+```{r child = "Problem_set_04.rmd"}
+
+```
+
+###Writing Assignment 03

@@ -1,0 +1,89 @@
+---
+title: "Problem Set_03"
+author: "Joshua Bray (18471742)"
+date: "version `r format(Sys.time(), '%B %d, %Y')`"
+output: html_document
+---
+
+#### Learning objectives: 
+Specific emphasis should be placed on the process used to find the answer. Be as comprehensive as possible e.g. provide URLs for web sources, literature citations, etc.  
+*(Reminders for how to format links, etc in RMarkdown are in the RMarkdown Cheat Sheets)*
+
+#### Specific Questions:
++ *How many prokaryotic divisions have been described and how many have no cultured representatives (microbial dark matter)?*
+
+**via 16S rRNA databases**  
+*2016*  
++ 89 bacterial phyla
++ 20 archael phyla
++ BUT, could be up to 1500 bac. phyla ->as there could be microbes that live in the "shadow biosphere"
+
+*2003*  
++ 26 of 52 major bacterial phyla have been cultured - probably more now!
+
++ *How many metagenome sequencing projects are currently available in the public domain and what types of environments are they sourced from?*
+  
++ How many: Many thousands - always changing
+  eg) 110217 on EBI database
+
++ Types of environments - ALL (Sediment, soil, gut, aquatic.....)
+  esp. those wehere it's hard to culture cumminities in lab settings 
+  
++ *What types of on-line resources are available for warehousing and/or analyzing environmental sequence information (provide names, URLS and applications)? * 
+
+There are many on-line resources available within the following categories:
+
+*Shotgun metagenomics*  
+* Assembly ex) Velvet  
+* Binning ex) TACOA  
+* Annotation ex) Bowtie  
+* Analysis pipelines ex) eggNOG  
+
+*Marker gene metagenomics*
+*Standalone software ex) Mothur
+*Analysis pipelines ex) SILVA - gold standard
+*Denoising ex) DADA
+*Databases ex) Ribosomal Database Project (RDP) - gold standard
+
+Sourced from: 
+Oulas, A., Pavloudi, C., Polymenakou, P., Pavlopoulos, G. A., Papanikolaou, N., Kotoulas, G., . . . Iliopoulos, I. (2015). Metagenomics: Tools and insights for analyzing next-generation sequencing data derived from biodiversity studies. Bioinformatics and Biology Insights, 2015(9), 75-88. 10.4137/BBI.S12462
+
+ALSO:  
+IMG/M - large repo  
+MG-RAST - another large repo  
+NCBI - database connected to many other databases  
+
++ *What is the difference between phylogenetic and functional gene anchors and how can they be used in metagenome analysis?*   
+
+*Phylogenetic*
+
+ + vertical gene transfer  
+ + carry phylogenetic informaton, allowing tree reconstruction  
+ + taxonomic  
+ + ideally single-copy  
+
+*Functional*
+
++ more horizontal gene transfer  
++ identify specific biochemical functions associated wth measureable effects  
++ not as useful as phylogeny  
+
++ *What is metagenomic sequence binning? What types of algorithmic approaches are used to produce sequence bins? What are some risks and opportunities associated with using sequence bins for metabolic reconstruction of uncultivated microorganisms?  *
+
+Metagenomic sequence binning is the process of grouping sequences that come from a single genome  
+
+*Types of algorithms:*  
+1. assign sequences to bdatabase  
+2. Group to each other based on DNA characteristics: GC content, codon usage  
+
+*Risks & Opportunities in binning.*
+Risks:
+ + incomplete coverabge of genome
+ + contamination from different phylogeny
+
++ *Is there an alternative to metagenomic shotgun sequencing that can be used to access the metabolic potential of uncultivated microorganisms? What are some risks and opportunities associated with this alternative? * 
+
++ Functional screens (biochemical etc.)
++ 3rd gen sequencing (nanopore)
++ single cell sequencing
++ FISH probes

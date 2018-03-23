@@ -1,0 +1,480 @@
+---
+title: "MICB425 Project 1"
+subtitle: "mothur vs. QIIME2 Microbiome Data Analysis"
+author: "Kim Dill-McFarland"
+date: "version `r format(Sys.time(), '%B %d, %Y')`"
+output:
+  html_document:
+    df_print: paged
+    toc: yes
+    toc_float:
+      collapsed: no
+---
+## Introduction
+
+For both projects in this course, you will work in teams to tackle challenging data sets in data science and microbial ecology. Project 1 uses 16S iTag (also known as amplicon) data from 7 depths in Saanich Inlet. 
+
+## Timeline
+
+1. March 7: OTU vs. ASV lecture
+2. March 9: Intro to Saanich lecture + start group work
+    + You should explore the data and choose your taxon of interest by the end of today
+3. March 12: Group work day
+4. March 14: Intro to statistics lecture + more group work time
+    + To gain the most out of the statistics introduction, your group should be at the point of trying to answer questions 2 and 4.
+5. March 16: Final group work day
+6. March 28: Soft deadline for draft to receive feedback
+7. April 25: Final reports due with final portfolios
+
+## Methods
+Water was collected from various depths at Saanich Inlet and filtered through a 0.22 μm Sterivex filter to collect biomass. Total genomic DNA was extracted from these filters. Amplicon sequencing of the variable 4 through 5 (V4-V5) region of the small subunit (16S) rRNA gene was then performed. These data were generated on the Illumina MiSeq platform with **2x300bp** technology. For more in-depth sampling and sequencing methods, please see [Hawley AK *et al* 2017](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5663217/) "A compendium of multi-omic sequence information from the Saanich Inlet water column" Sci Data 4: 170160.
+
+The resulting sequences were then processed through mothur and QIIME2 with as many consistent parameters as possible. Detailed pipelines are available in:
+
+`MICB425_materials/Project1/data`
+
+These pipelines resulted in 2 phyloseq objects, which you will use in your analyses. These are also available in the `data` folder.
+
+## Taxon of interest
+Based on your initial exploration of the data, you will choose 1 taxon to investigate in-depth. You can choose any taxon from any taxonomic level under the following criteria:
+
+* Not an "unclassified" group
+* Present at abundance > 0 in a least 3 samples
+* Encompasses at least 5 OTUs/ASVs
+    + You may also want to give yourself an upper limit on number of OTUs/ASVs as too many will make your plots large and unwieldy, though we are not specifically setting a maximum for you.
+
+## Reports
+Each group will complete **one** report with the following sections.
+
+### Abstract
+*200-250 words*
+
+### Introduction
+*500-750 words*
+
+* Introduce Saanich Inlet as a model ecosystem for studying microbial community responses to ocean deoxygenation *e.g.* seasonal cycles, relevant biogeochemistry, previous studies, etc. 
+* Introduce OTUs and ASVs
+* Frame your research questions for your chosen taxon. Why is your taxon of interest?
+
+### Methods
+*300-400 words*
+
+* Briefly describe the data (sampling, sequencing, processing, etc.)
+* Briefly describe your analysis methods like R version, packages used, statistcal tests employed to answer questions
+
+### Results
+*500-750 words*
+
+Your analysis will focus on the following questions:
+
+1. How does microbial community structure change with depth and oxygen concentration?
+    + Alpha-diversity
+    + Taxa presence and abundance
+2. Does your taxon of interest *significantly* differ in abundance with depth and/or oxygen concentration?
+3. Within your taxon, what is the richness (number of OTUs/ASVs)?
+4. Do the abundances of OTUs/ASVs within your taxon of interest change *significantly* with depth and/or oxygen concentration?
+5. Are the answers to the above the same using mothur and QIIME2 processed data?
+
+You must include ≥ 5 figures with titles and legends. See the example report for examples and inspiration. You do not necessary have to make any of these example plots; feel free to improve, expand, or make something completely different!
+
+Libraries used
+```{r eval=TRUE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(phyloseq)
+library(ggplot2)
+library(dplyr)
+library(stringr)
+library(magrittr)
+library(knitr)
+library(RColorBrewer)
+library(randomcoloR)
+```
+
+###Data Cleaning
+
+Generate a random colour palette for use in figures.
+```{r eval=TRUE, message=FALSE, warning=FALSE}
+palette <- distinctColorPalette(40)
+```
+
+Data were loaded into R and samples normalized to 100,000 sequences per sample. Reproducibility was kept by setting a random seed.  
+```{r eval=TRUE, message=FALSE, warning=FALSE}
+load("mothur_phyloseq.RData")
+load("qiime2_phyloseq.RData")
+
+set.seed(4831)
+m.norm = rarefy_even_depth(mothur, sample.size=100000)
+q.norm = rarefy_even_depth(qiime2, sample.size=100000)
+```
+
+Relative abundance percentages were calculated for the data.
+```{r eval=TRUE}
+m.percent = transform_sample_counts(m.norm, function(x) 100 * x/sum(x))
+q.percent = transform_sample_counts(q.norm, function(x) 100 * x/sum(x))
+```
+
+Phylum "Chloroflexi" was chosen.
+```{r eval=TRUE}
+phylum_name_mothur = "Chloroflexi"
+phylum_name_qiime2 = "D_1__Chloroflexi"
+```
+
+#### Microbial community structure change with depth and oxygen concentration
+##### Alpha-diversity
+Mothur
+```{r eval=TRUE}
+# Alpha-diversity of whole (mothur)
+m.alpha = estimate_richness(m.norm, measures = c("Chao1", "Shannon"))
+
+m.meta.alpha = full_join(rownames_to_column(m.alpha),
+  rownames_to_column(data.frame(m.percent@sam_data)), by = "rowname")
+
+m.meta.alpha %>% 
+  ggplot() +
+    geom_point(aes(x=Depth_m, y=Shannon)) +
+    geom_smooth(method='auto', aes(x=as.numeric(Depth_m), y=Shannon)) +
+    labs(title="Alpha-diversity across depth for mothur", y="Shannon's diversity index", x="Depth (m)")
+
+m.meta.alpha %>% 
+  ggplot() +
+    geom_point(aes(x=Depth_m, y=Chao1)) +
+    geom_smooth(method='auto', aes(x=as.numeric(Depth_m), y=Chao1)) +
+    labs(title="Chao1 across depth for mothur", y="Chao1 richness estimator", x="Depth (m)")
+
+m.meta.alpha %>% 
+  ggplot() +
+    geom_point(aes(x=O2_uM, y=Shannon)) +
+    labs(title="Alpha-diversity across oxygen concentration for mothur", y="Shannon's diversity index", x="Oxygen (uM)")
+
+```
+
+Qiime2
+```{r eval=TRUE}
+# Alpha-diversity of whole (qiime2)
+q.alpha = estimate_richness(qiime2, measures = c("Chao1", "Shannon"))
+
+q.meta.alpha = full_join(rownames_to_column(q.alpha),
+  rownames_to_column(data.frame(q.percent@sam_data)), by = "rowname")
+
+q.meta.alpha %>% 
+  ggplot() +
+    geom_point(aes(x=Depth_m, y=Shannon)) +
+    geom_smooth(method='auto', aes(x=as.numeric(Depth_m), y=Shannon)) +
+    labs(title="Alpha-diversity across depth for qiime2", y="Shannon's diversity index", x="Depth (m)")
+
+q.meta.alpha %>% 
+  ggplot() +
+    geom_point(aes(x=Depth_m, y=Chao1)) +
+    geom_smooth(method='auto', aes(x=as.numeric(Depth_m), y=Chao1)) +
+    labs(title="Chao1 across depth for qiime2", y="Chao1 richness estimator", x="Depth (m)")
+
+q.meta.alpha %>% 
+  ggplot() +
+    geom_point(aes(x=O2_uM, y=Shannon)) +
+    labs(title="Alpha-diversity across oxygen concentration for qiime2", y="Shannon's diversity index", x="Oxygen (uM)")
+
+```
+
+#### Taxa presence and abundance
+```{r eval=TRUE}
+# Mothur
+m.phyla.plot = m.percent %>%
+  plot_bar(fill="Phylum")+
+    geom_bar(aes(fill=Phylum), stat="identity")+
+    labs(title="Phyla across samples for mothur", y="Abundance (%)")+ 
+    scale_fill_manual(values=palette)
+
+# Qiime2
+q.phyla.plot = q.percent %>%
+  plot_bar(fill="Phylum")+
+    geom_bar(aes(fill=Phylum), stat="identity")+
+    labs(title="Phyla across samples for qiime2", y="Abundance (%)")+
+    scale_fill_manual(values=palette)
+```
+
+```{r eval=TRUE, echo=FALSE, fig.width=9, fig.height=9}
+# Show plots right below each other
+m.phyla.plot
+```
+
+<br><br>
+```{r eval=TRUE, echo=FALSE, fig.width=9, fig.height=9}
+q.phyla.plot
+```
+
+Mothur
+```{r eval=TRUE}
+
+# Significance depth
+m.norm %>% 
+  subset_taxa(Phylum==phylum_name_mothur) %>% 
+  tax_glom(taxrank = 'Phylum') %>%
+  psmelt() %>%
+  lm(Abundance ~ Depth_m, .) %>% 
+  summary()
+
+m.percent %>% 
+  subset_taxa(Phylum==phylum_name_mothur) %>% 
+  psmelt() %>% 
+  group_by(Sample) %>% 
+  summarize(Abundance_sum=sum(Abundance), Depth_m=mean(Depth_m)) %>% 
+  
+ggplot() +
+  geom_point(aes(x=Depth_m, y=Abundance_sum)) +
+  geom_smooth(method='lm', aes(x=as.numeric(Depth_m), y=Abundance_sum)) +
+  labs(title="Abundance unclassified domain across depth")
+
+# Significance oxygen
+print(phylum_name_mothur)
+m.norm %>% 
+  subset_taxa(Phylum==phylum_name_mothur) %>% 
+  tax_glom(taxrank = 'Phylum') %>%
+  psmelt() %>%
+  lm(Abundance ~ O2_uM, .) %>% 
+  summary()
+
+m.percent %>% 
+  subset_taxa(Phylum==phylum_name_mothur) %>% 
+  psmelt() %>% 
+  group_by(Sample) %>% 
+  summarize(Abundance_sum=sum(Abundance), O2_uM=mean(O2_uM)) %>% 
+  
+ggplot() +
+  geom_point(aes(x=O2_uM, y=Abundance_sum)) +
+  geom_smooth(method='lm', aes(x=as.numeric(O2_uM), y=Abundance_sum)) +
+  labs(title="Abundance unclassified domain across oxygen concentration")
+
+```
+Qiime2
+```{r eval=TRUE}
+
+# Significance depth
+qiime2 %>% 
+  subset_taxa(Phylum==phylum_name_qiime2) %>% 
+  tax_glom(taxrank = 'Phylum') %>%
+  psmelt() %>%
+  lm(Abundance ~ Depth_m, .) %>% 
+  summary()
+
+q.percent %>% 
+  subset_taxa(Phylum==phylum_name_qiime2) %>% 
+  psmelt() %>% 
+  group_by(Sample) %>% 
+  summarize(Abundance_sum=sum(Abundance), Depth_m=mean(Depth_m)) %>% 
+  
+ggplot() +
+  geom_point(aes(x=Depth_m, y=Abundance_sum)) +
+  geom_smooth(method='lm', aes(x=as.numeric(Depth_m), y=Abundance_sum)) +
+  labs(title="Abundance unclassified domain across depth")
+
+# Significance oxygen
+qiime2 %>% 
+  subset_taxa(Phylum==phylum_name_qiime2) %>% 
+  tax_glom(taxrank = 'Phylum') %>%
+  psmelt() %>%
+  lm(Abundance ~ O2_uM, .) %>% 
+  summary()
+
+q.percent %>% 
+  subset_taxa(Phylum==phylum_name_qiime2) %>% 
+  psmelt() %>% 
+  group_by(Sample) %>% 
+  summarize(Abundance_sum=sum(Abundance), O2_uM=mean(O2_uM)) %>% 
+  
+ggplot() +
+  geom_point(aes(x=O2_uM, y=Abundance_sum)) +
+  geom_smooth(method='lm', aes(x=as.numeric(O2_uM), y=Abundance_sum)) +
+  labs(title="Abundance unclassified domain across oxygen concentration")
+```
+
+
+#### Within your taxon, what is the richness (number of OTUs/ASVs)?
+```{r eval=TRUE}
+# Number of OTUs
+m.chlor_subset = m.norm %>%
+  subset_taxa(Phylum==phylum_name_mothur) %>% 
+  estimate_richness(measures = c("Observed"))
+# Different way to get number of OTUs
+m.tax_table = data.frame(m.norm@tax_table)
+m.filtered = m.tax_table %>% 
+  rownames_to_column('OTU') %>%
+  filter(Phylum==phylum_name_mothur) %>%
+  column_to_rownames('OTU')
+# Number of ASVs
+q.chlor_subset = qiime2 %>%
+  subset_taxa(Phylum==phylum_name_qiime2) %>% 
+  estimate_richness(measures = c("Observed"))
+# Different way to get number of ASVs
+q.tax_table = data.frame(qiime2@tax_table)
+q.filtered = q.tax_table %>% 
+  rownames_to_column('ASV') %>%
+  filter(Phylum==phylum_name_qiime2) %>%
+  column_to_rownames('ASV')
+```
+
+#### Do the abundances of OTUs/ASVs within your taxon of interest change significantly with depth and/or oxygen concentration?
+
+General linear model for each OTU/ASV with depth:
+```{r}
+# Remove the otu_stats object so upon rerunning doesn't add to existing object
+rm(otu_stats)
+# Create new data frame
+otu_stats = data.frame("Estimate" = numeric(0), "Std. Error"= numeric(0),"t value"= numeric(0),"Pr(>|t|)"= numeric(0))
+for (otu in row.names(m.filtered)){
+  linear_fit = m.norm %>% 
+    psmelt() %>% 
+    filter(OTU==otu) %>% 
+
+    lm(Abundance ~ Depth_m, .) %>% 
+    summary()
+  otu_data = linear_fit$coefficients["Depth_m",]
+  otu_stats <- rbind(otu_stats, otu_data)
+}
+colnames(otu_stats)<- (c("Estimate", "Std. Error","t value","Pr(>|t|)"))
+row.names(otu_stats) <- row.names(m.filtered)
+kable(otu_stats,caption="Correlation data of OTUs within Chloroflexi phylum across depth")
+```
+
+```{r}
+# Remove the asv_stats object so upon rerunning doesn't add to existing object
+rm(asv_stats)
+# Create new data frame
+asv_stats = data.frame("Estimate" = numeric(0), "Std. Error"= numeric(0),"t value"= numeric(0),"Pr(>|t|)"= numeric(0))
+for (otu in row.names(q.filtered)){
+  linear_fit = q.norm %>% 
+    psmelt() %>% 
+    filter(OTU==otu) %>% 
+
+    lm(Abundance ~ Depth_m, .) %>% 
+    summary()
+  asv_data = linear_fit$coefficients["Depth_m",]
+  asv_stats <- rbind(asv_stats, asv_data)
+}
+colnames(asv_stats)<- (c("Estimate", "Std. Error","t value","Pr(>|t|)"))
+row.names(asv_stats) <- row.names(q.filtered)
+kable(asv_stats,caption="Correlation data of ASVs within Chloroflexi phylum across depth")
+```
+
+General linear model for each OTU/ASV with O2:
+```{r}
+# Remove the otu_stats object so upon rerunning doesn't add to existing object
+rm(otu_stats)
+# Create new data frame
+otu_stats = data.frame("Estimate" = numeric(0), "Std. Error"= numeric(0),"t value"= numeric(0),"Pr(>|t|)"= numeric(0))
+for (otu in row.names(m.filtered)){
+  linear_fit = m.norm %>% 
+    psmelt() %>% 
+    filter(OTU==otu) %>% 
+
+    lm(Abundance ~ O2_uM, .) %>% 
+    summary()
+  otu_data = linear_fit$coefficients["O2_uM",]
+  otu_stats <- rbind(otu_stats, otu_data)
+}
+colnames(otu_stats)<- (c("Estimate", "Std. Error","t value","Pr(>|t|)"))
+row.names(otu_stats) <- row.names(m.filtered)
+kable(otu_stats,caption="Correlation data of OTUs within Chloroflexi phylum across O2 gradient")
+```
+
+```{r}
+# Remove the asv_stats object so upon rerunning doesn't add to existing object
+rm(asv_stats)
+# Create new data frame
+asv_stats = data.frame("Estimate" = numeric(0), "Std. Error"= numeric(0),"t value"= numeric(0),"Pr(>|t|)"= numeric(0))
+for (otu in row.names(q.filtered)){
+  linear_fit = q.norm %>% 
+    psmelt() %>% 
+    filter(OTU==otu) %>% 
+
+    lm(Abundance ~ O2_uM, .) %>% 
+    summary()
+  asv_data = linear_fit$coefficients["O2_uM",]
+  asv_stats <- rbind(asv_stats, asv_data)
+}
+colnames(asv_stats)<- (c("Estimate", "Std. Error","t value","Pr(>|t|)"))
+row.names(asv_stats) <- row.names(q.filtered)
+kable(asv_stats,caption="Correlation data of ASVs within Chloroflexi phylum across O2 gradient")
+```
+
+Plots to go along with these tests:
+OTUs
+```{r}
+m.percent %>% 
+  subset_taxa(Phylum==phylum_name_mothur) %>% 
+  psmelt() %>% 
+  
+  ggplot() +
+  geom_point(aes(x=Depth_m, y=Abundance)) +
+  geom_smooth(method='lm', aes(x=Depth_m, y=Abundance)) +
+  facet_wrap(~OTU, scales="free_y") +
+  labs(title="Abundance of OTUs within Chloroflexi phylum across depth")
+```
+ASVs
+```{r}
+q.percent %>% 
+  subset_taxa(Phylum==phylum_name_qiime2) %>% 
+  psmelt() %>% 
+  
+  ggplot() +
+  geom_point(aes(x=Depth_m, y=Abundance)) +
+  geom_smooth(method='lm', aes(x=Depth_m, y=Abundance)) +
+  facet_wrap(~OTU, scales="free_y") +
+  labs(title="Abundance of ASVs within Chloroflexi phylum across depth")
+```
+
+Abundance of Chloroflexi OTUs across depth 
+```{r}
+m.percent %>% 
+  subset_taxa(Phylum==phylum_name_mothur) %>%
+  psmelt() %>% 
+  
+  ggplot() +
+  geom_point(aes(x=Sample, y=OTU, size=Abundance, color=OTU)) + 
+  scale_size_continuous(range = c(0,5)) +
+  labs(title="Abundance of OTUs within Chloroflexi phylum across depth")
+```
+
+Abundance of Chloroflexi ASVs across depth 
+```{r}
+q.percent %>% 
+  subset_taxa(Phylum==phylum_name_qiime2) %>%
+  psmelt() %>% 
+  
+  ggplot() +
+  geom_point(aes(x=Sample, y=OTU, size=Abundance, color=OTU)) + 
+  scale_size_continuous(range = c(0,5)) +
+  labs(title="Abundance of ASVs within Chloroflexi phylum across depth")
+```
+
+
+
+### Discussion
+*750-1000 words*
+
+* If you found significant differences for your taxon across depth/oxygen, why might these be occurring (*hint* think about the accompanying geochemical data we have)? 
+* What are the implications of potential differences in pipelines for microbial ecology research and discovery?
+* Future directions
+
+### References
+*10 or more* formatted as in *Applied and Environmental Microbiology*
+
+## Assessment
+### Reports
+March 28: Please bring a printed copy of your group report to class for interim assessment. We will provide feedback and welcome drafts at any level!
+
+April 25: Each individual should have a copy of their group's final report in their portfolio for their future reference. These copies should be *identical* as we will mark one group member's portfolio copy at random and apply that to all other group members.
+
+Reports will be assessed on:
+
+* Completion of relevant analyses toward answering biological questions
+* Logic and completeness of conclusions made from these analyses
+* Writing clarity, grammar, and style
+* Figure clarity, effectiveness, and relevance
+* Group assessment (20%, see below)
+
+### Groups
+Assessment of groups will occur through [CATME](https://www.catme.org/) wherein everyone will assess themselves and their group members at the end of the term. In addition, each individual will be asked to identify which part(s) of the final report they contributed to and how.
+
+Should differences in contributions to projects be apparent, individuals will be marked accordingly for this portion of their overall project grade (20%). In extreme situations, individuals who fail to contribute to their group will be asked to complete an individual report.
+
+If issues occur within your group, please do not hesitate to contact Dr. Hallam (shallam@mail.ubc.ca), Dr. Crowe (sean.crowe@ubc.ca), or Dr. Dill-McFarland (kadm@mail.ubc.ca) *at any point*. 

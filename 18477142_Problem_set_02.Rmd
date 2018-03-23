@@ -1,0 +1,42 @@
+---
+title: "Problem Set_02"
+author: "Joshua Bray (18477142))"
+date: "version `r format(Sys.time(), '%B %d, %Y')`"
+output: html_document
+---
+### Problem set_02 “Microbial Engines”
+#### Learning objectives: 
+Discuss the role of microbial diversity and formation of coupled metabolism in driving global biogeochemical cycles.
+
+#### Specific Questions:
+* What are the primary geophysical and biogeochemical processes that create and sustain conditions for life on Earth? How do abiotic versus biotic processes vary with respect to matter and energy transformation and how are they interconnected?
+
+Geophysical - Geothermal processes, diagenesis, tectonics, erosion, mountain building, atmosphere  
+Biogeochemical - Microbial catalyzed redox reactions (photosynthesis, fermentation, etc.)  
+
+The abiotic processes recycle matter from the earth to be used by biotic processes, which then use the matter to create energy and pass the products of their metabolism on to other biotic processes to use. The final end products, like CO2 and CH4, are released into the atmosphere to be recycled by the abiotic processes. 
+
+* Why is Earth's redox state considered an emergent property?
+
+The feedback between microbial evolution and biogeochemical processes has created Earth's current redox state. Every process is linked and interconnected.   
+
+* How do reversible electron transfer reactions give rise to element and nutrient cycles at different ecological scales? What strategies do microbes use to overcome thermodynamic barriers to reversible electron flow?  
+
+Cycles can be oxidative or reductive, yet they all feed the end products into new reactions, creating cycles. 
+Strategies: 
+- methanogenic Archaea reduce CO2 with H2, but require high enough H+ tension for the reaction to proceed forward, otherwise it will proceed in reverse. Certain species of methanogens utilize the unfavourable reverse reaction through the synergistic cooperation with H2 consuming sulfate reducers.
+
+* Using information provided in the text, describe how the nitrogen cycle partitions between different redox niches and microbial groups. Is there a relationship between the nitrogen cycle and climate change?   
+
+The only biological process that makes N2 available for biomolecule synthesis is nitrogen fixation, a reductive process that transforms N2 to NH4+. This process is catalyzed by nitrogenase and inhibited by O2. 
+O2 present - NH4+ oxidized to nitrate in two-stage pathway requiring one group of microbes to oxidize ammonia to NO2-, which is subsequently oxidized to NO3- by a different niche of microbes. 
+O2 absent - a different microbial group uses NO2- and NO3- as e- acceptors in the anaerobic oxidation of organic matter, ultimately forming N2.  
+There is a link between the nitrogen cycle and climate change, for without the available nitrogen provided by the nitrogen cycle life would not have been able to evolve the pathways required for oxidative phosphorylation, which has driven major geological climate changes throughout earth's history. 
+
+* What is the relationship between microbial diversity and metabolic diversity and how does this relate to the discovery of new protein families from microbial community genomes?  
+
+While horizontal gene flow has distributed many families of genes, there still exists metabolic diversity amongst microbial communities. For example, chlorophyll-based photosynthesis is restricted to bacteria while methanogenesis is restricted to archaea. The discovery of new protein families is increasing linearly with the number of new genomes sequenced.
+
+* On what basis do the authors consider microbes the guardians of metabolism?  
+
+Due to the glacial periods of earth's history, life was restricted to tiny pockets of microbiall-habital patches, where the metabolic pathways remained protected. Since the metabolic mechanisms have been horizontally transfered to every species on earth, individual taxonomic units can go extinct while the core metabolic machines carry on unperturbed.

@@ -1,0 +1,209 @@
+---
+title: "Problem Set_04"
+author: "Joshua Bray(18477142)"
+date: "version `r format(Sys.time(), '%B %d, %Y')`"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+#### Learning objectives: 
+
+* Gain experience estimating diversity within a hypothetical microbial community
+
+#### Part 1: Description and enumeration
+Obtain a collection of "microbial" cells from "seawater". The cells were concentrated from different depth intervals by a marine microbiologist travelling along the Line-P transect in the northeast subarctic Pacific Ocean off the coast of Vancouver Island British Columbia. 
+
+Sort out and identify different microbial "species" based on shared properties or traits. Record your data in this Rmarkdown using the example data as a guide.
+
+```{r}
+#Libraries
+library(kableExtra)
+library(tidyverse)
+library(knitr)
+library(vegan)
+library(phyloseq)
+```
+
+```{r}
+
+#Data and Table 1 Shared by Ian Lee
+ 
+Table_1 = data.frame(
+  Number = c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15),
+  Name = c("Rigoa","Skittles","MandMs","MikeandIkes","Gummybears","Lego","Gumdrops","fruitgummies","macrophage","cokebottles","Gummywhitedrops","Watermelon","RedGreenFish","Kisses","Redsnakes"),
+
+Characteristics = c("long gummies","sour candy with shell","Chocolates with shell","Long chewy beans","Bear shaped gummies","Brick shaped hard candy","large round chewy candy with hard shell","fruit shaped gummies","octopus shaped gummies coated sugar","coke bottle shaped gummies","striped disk gummies coated suger","watermelon coloured and sphere shaped gummies","red and green fish shaped gummies","teardrop shaped chocolates","long thin red snake gummies"),
+    Occurences = c(7,197,218,199,91,18,24,2,6,3,3,1,1,16,13)
+ )  
+  
+Table_1 %>% 
+  kable("html") %>%
+  kable_styling(bootstrap_options = "striped", font_size = 10, full_width = F)
+  
+#The "organisms" found in this table takes into account all candy given to us and leaves none out. Rare or unclassifiable species were given their own bin with descriptions on how they differed. 
+```
+
+#### Part 2: Collector's curve
+
+```{r}
+#Create Data Table for Rarefy
+Table_2 = data.frame(
+  Number = c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15),
+  Occurences = c(7,197,218,199,91,18,24,2,6,3,3,1,1,16,13)
+)
+#Rarefaction Curve from Vegan package
+#Rarecurve(data, step size, labels )
+rarecurve(Table_2, step = 1, xlab = "Cumulative Number of Species", ylab = "Number of Observed Species", label = TRUE)
+```
+
+#### Part 3: Diversity estimates (alpha diversity)
+Using the table from Part 1, calculate species diversity using the following indices or metrics.
+
+##### Diversity: Simpson Reciprocal Index
+
+```{r}
+# Modify Table 1 to be a community matrix, i.e. samples as rows (you will only have 1), "species" as columns, and the encompassed data as counts of those "species" in the sample
+community = Table_1 %>% 
+  # Select only name and count columns
+  select(Name, Occurences) %>%
+  # Spread into taxa as columns format
+  spread(Name, Occurences) %>% 
+  # Convert to phyloseq OTU table data type
+  otu_table(taxa_are_rows = FALSE)
+
+# Create a random subsample (rarefy) the data to 100 observations
+subsample = as.data.frame(rarefy_even_depth(community, sample.size=100, replace=FALSE, rngseed=762))
+
+#Make a table for the Sampling
+subsample %>% 
+  kable("html") %>%
+  kable_styling(bootstrap_options = "striped", font_size = 10)
+
+#Sample Species Diversity
+s1 = 1/100
+s2 = 7/100
+s3 = 13/100
+s4 = 1/100
+s5 = 4/100
+s6 = 3/100
+s7 = 1/100
+s8 = 26/100
+s9 = 24/100
+s10 = 1/100
+s11 = 18/100
+s12 = 1/100
+
+1/(s1^2 + s2^2 + s3^2 + s4^2 + s5^2 + s6^2 + s7^2 + s8^2 + s9^2 + s10^2 + s11^2 + s12^2)
+#The Simpson Reciprocal Index for my random sample is 5.482456
+```
+
+
+```{r}
+#Overall Species Diversity
+Species1 = 7/799
+Species2 = 197/799
+Species3 = 218/799
+Species4 = 199/799
+Species5 = 91/799
+Species6 = 18/799
+Species7 = 24/799
+Species8 = 2/799
+Species9 = 6/799
+Species10 = 3/799
+Species11 = 3/799
+Species12 = 1/799
+Species13 = 1/799
+Species14 = 16/799
+Species15 = 13/799
+
+1/(Species1^2 + Species2^2 + Species3^2 + Species4^2 + Species5^2 + Species6^2 + Species7^2 + Species8^2 + Species9^2 + Species10^2 + Species11^2 + Species12^2 + Species13^2 + Species14^2 + Species15^2)
+#The Simpson Reciprocal Index for the original total community is  4.706271
+```
+
+* What is the Simpson Reciprocal Index for your sample?
+
+5.482456
+
+* What is the Simpson Reciprocal Index for your original total community?
+
+4.706271
+
+##### Richness: Chao1 richness estimator
+
+* What is the chao1 estimate for your sample?
+
+```{r}
+#Species = 12
+#a = 5
+#b = 7
+
+12 +5^2/(2*7)
+
+#Chao1 estimate for my sample is 13.78571
+```
+* What is the chao1 estimate for your original total community?
+```{r}
+#Species = 15
+#a = 2
+#b = 13
+
+12 +2^2/(2*13)
+
+#Chao1 estimate for the overall community is 12.15385
+```
+
+#### Part 4: Alpha-diversity functions in R
+
+```{r}
+#New Transposed Table for Overall Data
+Total_Diversity= 
+  Table_1 %>% 
+  select(Name, Occurences) %>% 
+  spread(Name, Occurences)
+
+#Print 
+Total_Diversity
+```
+
+* What are the Simpson Reciprocal Indices for your sample and community using the R function?
+
+```{r}
+#Simpson Reciprocal Index Calculations
+
+#Overall Data
+diversity(Total_Diversity, index="invsimpson")
+
+#Sample Data
+diversity(subsample, index="invsimpson")
+```
+
+* What are the chao1 estimates for your sample and community using the R function?
+
+```{r}
+#Calculate chao1 estimates
+
+#Overall Data
+specpool(Total_Diversity)
+
+#Sample Data
+specpool(subsample)
+```
+
+  + Verify that these values match your previous calculations.
+  
+*Simpson Diversity*
+Matches
+
+*Chao1*
+Values are off for both the sample and the total community.
+
+#### Part 5: Concluding activity
+
+* How does the measure of diversity depend on the definition of species in your samples?
+The species definition used greatly impacts the diversity of the samples. This is especially observed in the chao1 estimation because it uses any species with only a single member as part of the calculation. So samples that are segregated into as many different species as possible will likely end up with more singlular-species than if a more general species definition was used.
+
+* Can you think of alternative ways to cluster or bin your data that might change the observed number of species?
+The species were clustered using the type of candy they were, but alternative bins could have included colours/flavors. This would likely increase the number of species, unless the clustering was solely based on colours in which case they would have had similar numbers of species.
+
+* How might different sequencing technologies influence observed diversity in a sample?
+One influencing factor is the depth of the sequencing technology.The different sequencing technologies all have varying sequencing depths, which can influence the observed diversity in the sample. Also, we do not yet have a universally accepted 16S rDNA sequencing site, so the different primers and sequencing locations used will impact the observed diversity.
