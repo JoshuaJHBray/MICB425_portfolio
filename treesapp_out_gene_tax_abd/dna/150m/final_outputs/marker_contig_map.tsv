@@ -1,0 +1,13 @@
+Query	Marker	Taxonomy	Confident_Taxonomy	Abundance	Likelihood	WTD
+scaffold05461	norC	Bacteria; Firmicutes; Clostridia; Clostridiales; Peptococcaceae	Bacteria; Firmicutes; Clostridia; Clostridiales; Peptococcaceae	3.81676	0.270594	0.0875
+scaffold01702	norC	Bacteria; Proteobacteria; Epsilonproteobacteria; Campylobacterales; Helicobacteraceae; Sulfurimonas	Bacteria; Proteobacteria; Epsilonproteobacteria; Campylobacterales; Helicobacteraceae; Sulfurimonas	2.45121	0.996271	0.01562
+scaffold04766	norC	Bacteria; Proteobacteria; Gammaproteobacteria	Bacteria; Proteobacteria; Gammaproteobacteria	1.85025	0.58043	0.03906
+scaffold218946	norC	Bacteria; Proteobacteria	Bacteria; Proteobacteria	1.10217	0.316133	0.29087
+scaffold02599	norC	Bacteria; Proteobacteria; Gammaproteobacteria; unclassified Gammaproteobacteria; Candidatus Thioglobus; environmental samples	Bacteria; Proteobacteria; Gammaproteobacteria; unclassified Gammaproteobacteria; Candidatus Thioglobus; environmental samples	240.974	1.0	0.0
+scaffold06367	norC	Bacteria; Proteobacteria; Gammaproteobacteria	Bacteria; Proteobacteria; Gammaproteobacteria	83.2527	0.364253	0.07118
+scaffold87774	norC	Bacteria; Proteobacteria; Epsilonproteobacteria; unclassified Epsilonproteobacteria; Nitratiruptor; Nitratiruptor tergarcus	Bacteria; Proteobacteria; Epsilonproteobacteria; unclassified Epsilonproteobacteria; Nitratiruptor; Nitratiruptor tergarcus	0.962087	0.441955	0.0
+scaffold10626	norC	Bacteria; Proteobacteria; Gammaproteobacteria	Bacteria; Proteobacteria; Gammaproteobacteria	31.3889	0.987262	0.03906
+scaffold61057	norC	Bacteria; Proteobacteria; Gammaproteobacteria	Bacteria; Proteobacteria; Gammaproteobacteria	15.2239	0.982484	0.03906
+scaffold03760	norC	Bacteria; Bacteroidetes; Flavobacteriia; Flavobacteriales; Flavobacteriaceae; Aequorivita	Bacteria; Bacteroidetes; Flavobacteriia; Flavobacteriales; Flavobacteriaceae; Aequorivita	3.01375	0.837626	0.0
+scaffold15682	norC	Bacteria; Chloroflexi; Ardenticatenia; Ardenticatenales; Ardenticatenaceae; Ardenticatena	Bacteria; Chloroflexi; Ardenticatenia; Ardenticatenales; Ardenticatenaceae; Ardenticatena	5.38646	0.996305	0.0
+scaffold17768	norC	Bacteria; Proteobacteria; Gammaproteobacteria	Bacteria; Proteobacteria; Gammaproteobacteria	1.19974	0.288815	0.10337

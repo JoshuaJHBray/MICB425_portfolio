@@ -1,0 +1,752 @@
+---
+title: "Project 1 report"
+author: "Group 6"
+date: "version `r format(Sys.time(), '%B %d, %Y')`"
+output:
+  html_document:
+    df_print: paged
+    toc: yes
+    toc_float:
+      collapsed: no
+---
+
+# Abstract
+
+Analysis of sequences obtained from Saanich Inlet using mothur and QIIME2 revealed peak community alpha-diversity at a depth of approximately 100 m which contains approximately 38 uM of dissolved oxygen. Lowest diversity was observed at greater depth and with lower oxygen levels. Further analysis of taxonomic levels revealed Proteobacteria as the most abundant phylum within all samples. In order to investigate how microbial communities differ across depth and oxygen gradients within the Saanich Inlet, we focused on the phylum Chloroflexi. Analysis revealed a positive correlation between depth and Chloroflexi abundance. This correlation was significant only when analysis was based on QIIME2-generated ASVs, but not mothur-generated OTUs. In addition, there exists a negative correlation between oxygen concentration and Chloroflexi abundance. Similarly, significance was only reported using QIIME2-generated ASVs. The analysis of data using QIIME2 identified four classes within the phylum Chloroflexi (Dehalococcoidia, Anaerolineae, SAR202 and JG30-KF-CM66) while mothur identified two classes within this phylum (Anaerolineae and SAR202). Changes in the abundance of OTUs and ASVs were correlated with depth and oxygen concentration. No correlation was found to be significant. The abundances of 24 (of 34) OTUs and 38 (of 47) ASVs were positively correlated with depth, while all OTUs and 46 ASVs were negatively correlated with oxygen concentration. However, the presence of seeming outliers in data analyzed by both mothur and QIIME2 may have biased the trend line and reduced model significances. Although, the absence of sufficient data limits us from classifying them as outliers. Lastly, changes in the abundances of some OTUs and ASVs were found to be significantly positively correlated with hydrogen sulfide levels. The differences observed between mothur and QIIME2 indicate the role played by the choice of pipeline to analyze results.
+
+# Introduction
+
+Saanich Inlet is a seasonally anoxic fjord [1] located between Vancouver Island and the Saanich Peninsula. It is 24 km long and has a basin of up to 234 meters in depth [2]. It has a 75-meter sill which acts to protect the deeper waters [3]. Because of this sill and the constantly high input of organic material from freshwater discharge and primary production in surface waters, its conditions below 110 meters are anoxic [3]. Oxygen is replenished dependent on the season, mostly in the fall, which modifies the oxygen gradient and thereby the environmental conditions for the microbial community that inhabit the inlet [3]. Dissolved oxygen increases gradually from a minimum concentration at higher depth up to its peak concentration at the surface due to phytoplankton metabolism and atmospheric surface waters gas exchange [3]. Nitrate reduction by denitrifiers happens mostly in the deep water following oxygenation [3]. This results in a steep nitrate gradient when looking at the different depths within the fjord [3]. A study by Zaikova *et al.* found that microbial diversity was highest in the hypoxic transition area and that it decreases within the anoxic basin waters [1]. It is vital to study the roles of various microorganisms within Saanich Inlet in order to understand how they affect environmental conditions like greenhouse gases, methane, and denitrogenation on a larger scale in the world’s oceans [3].  
+
+Oxygen minimum zones (OMZ) are places within the ocean where the saturation of oxygen is the lowest, typically occurring at depths of about 200 to 1000 meters [4]. These OMZs are normally found along the western boundaries of continents, which is where upwelling can bring nutrient rich water from deep within the ocean up to the surface [5]. They can also be found in coastal basins where restricted circulation can restrict mixing of deep and surface waters [5]. Not only that, but human activity can affect the size of periodic dead zones (in coastal ocean and enclosed basins) by causing runoff from agriculture to mix with marine waters - this process is called eutrophication [5]. Some important examples of this include dead zones in the Mississippi River Delta and Chesapeake Bay in America. The Saanich Inlet in British Columbia is a glacially carved fjord unlike these other zones where its entrance sill restricts oxygen rich water from entering the basin [5]. 
+
+Operational Taxonomic Units (OTUs) are defined as clusters of organisms that have been grouped based on DNA sequence similarity of a specific DNA segment known as a taxonomic marker gene [6]. The grouped DNA sequences differ by less than a fixed and arbitrary sequence dissimilarity threshold, often 3% [7]. This process of clustering on a specific DNA segment, known as DNA barcoding, allows for rapid, targeted, and high throughput analysis of genetic variation in a specific genomic region such as 16s/18s rRNA sequences, leading to large scale characterization of microbial communities [6, 8]. However, new recent amplicon sequence variants (ASVs) methods have been developed with finer resolution and are independent of dissimilarity thresholds that have been used to define OTUs. ASV methods have shown higher specificity and sensitivity in comparison to OTU methods as they distinguish sequence variants as small as single nucleotides and denoise the sequences by discriminating biological sequences from errors. This is done based on the expectation that biological sequences are more abundant and more repeatedly observed than error-containing sequences [7].  
+
+Using OTU and ASV data for samples collected from the Saanich Inlet, we investigated how microbial communities differ across depth and oxygen gradients within the Saanich Inlet, with a particular focus on the phylum Chloroflexi. We found Chloroflexi of interest because its members are highly abundant in marine sediments [9] and present a broad spectrum of metabolic characteristics such as anoxygenic photosynthesis [10], obligate aerobic and anaerobic heterotrophy [11],  and even predation with a gliding motility [12]. Like many other microbes, members of Chloroflexi can be a challenge to grow in culture, with some classes yet to be cultured successfully, which has made characterizing their metabolisms a challenge [13, 21]. However, new sequencing technologies have made it possible to analyze the genome of and characterize these uncultured microbes [13-21].  
+
+In our Saanich Inlet data, we were able to identify four classes within the phylum Chloroflexi: Dehalococcoidia, Anaerolineae, SAR202, and JG30-KF-CM66. Members of the class Dehalococcoidia are widely distributed throughout marine sediments [13] and anoxic deep waters [14]. Dehalococcoidia grow via anaerobic organohalide respiration and are extensively studied for their potential in the bioremediation of chloride-contaminated water and soil [13, 14]. As for the class Anaerolineae, despite its members being prevalent in various ecosystems, only a few strains have been successfully cultured [15]. Anaerolineae compose one of the core populations of anaerobic bacteria involved in anaerobic digestion and possess key genes for catalyzing cellulose hydrolysis [16].The SAR202 cluster was one of the earliest discoveries of marine bacteria which inhabited the aphotic zone [17], and since then SAR202 has been found to be ubiquitous throughout the deep ocean [18]. Members of SAR202 are involved in metabolizing organosulfur compounds and likely play a major role in sulfur cycling [19]. JG30-KF-CM66 is a relatively uncharacterized clade of acidobacteria, but it has been identified in soft coal slags [20] and anoxic ocean water [21]. The characteristics of each of these classes impact how the spatial distribution of the Chloroflexi phylum differs within Saanich Inlet. We also set out to determine if and how different sequence processing pipelines, specifically mothur and QIIME2, would impact these biological conclusions.
+
+# Methods
+
+## Sample Collection and Processing
+
+Water samples from 16 depths (10-200m) from cruise 72 were collected at station S3 (48°35.500 N, 123°30.300 W) onboard MSV John Strickland. Geochemical and multi-omic information, which included 16S rRNA gene amplicon sequences (V4-5 hypervariable regions) and dissolved O2, were extracted for each depth [22, 23]. Data from 7 depths (10, 100, 120, 135, 150, 165, 200m) were further analyzed. Dissolved O2 was measured onboard by the Sea-Bird SBE 43 Photosynthetically Active Radiation sensor [22]. 2L of water sample at each depth were filtered onto 0.22μm Strerivex filters, and stored until amplicon sequencing, which was carried out on the Illumina MiSeq platform at the Joint Genome Institute. Base qualities were encoded in Phred33, and primers 515F and 806R were used for 16S rRNA gene amplification [23].
+
+## Data Processing
+
+Reads were independently processed using mothur and QIIME2 based pipelines, which cluster sequences based on OTUs and ASVs, respectively. Resultant data were constructed as phyloseq objects for downstream analysis in R. For a comprehensive outline and description of commands used for each pipeline, refer to the R markdown documents provided by Kim Dill-McFarland (2018; mothur pipeline) and Julia Beni (2018; QIIME2 pipeline).
+
+### mothur pipeline
+Sequenced reads were first assembled into contigs, which were screened and de-duplicated so that the remainder 1) were between 200bp and 600bp long, 2) had fewer than 8 homopolymers and 3) had no ambiguous bases. 
+
+Configs were trimmed such that they would only align to bases 10368 to 25434 in the SILVA database (release 128), and uninformative bases were removed. Resultant sequences were de-duplicated again.
+
+Sequences were then pre-clustered and clustered de novo (using 97% sequence similarity) to determine the final OTUs. Chimeric sequences were also filtered away. 
+
+Clusters were classified using the SILVA database, and resulting taxonomies were condensed.
+
+### QIIME2 pipeline
+
+Reads were demultiplexed and imported into QIIME2. Per-base read qualities were visualized to determine downstream trim parameters. 
+
+ASVs were generated using the Dada2 protocol using custom trim parameters for quality control. Resultant ASVs were classified using the SILVA database (release 119) using a 99% similarity threshold.
+
+The ASV table was then converted to text format used to create a phyloseq object.
+
+## Data Analysis
+
+Analysis was completed in R v3.4.3 [24] using the following packages.
+```{r eval=TRUE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(phyloseq)
+library(ggplot2)
+library(dplyr)
+library(stringr)
+library(magrittr)
+library(knitr)
+library(gridExtra)
+library(grid)
+library(randomcoloR)
+```
+
+Alpha-diversities of clusters identified by mothur and QIIME2 from each sample were measured by the Shannon diversity index and the Chao1 richness estimator. Alpha-diversities were plotted against sample depth and oxygen concentration for both clustering methods, and were fitted using local polynomial regression models where appropriate. Relative abundances of all phylum level classifications produced by mothur and QIIME2 were also plotted for each sample. 
+
+Relative abundances of Chloroflexi OTUs and ASVs amongst all clusters were plotted, both as a whole and individually, across depth and oxygen gradients. Significances of correlations between these variables were based on linear regression models, as all variables are continuous and there is a lack of evidence to suggest curvilinear relationships between them. 
+
+## Data cleaning
+
+```{r eval=TRUE, message=FALSE, warning=FALSE}
+# Generate random colours for use in figures.
+palette <- distinctColorPalette(40) 
+```
+
+Data were loaded into R and samples normalized to 100,000 sequences per sample. 
+```{r eval=TRUE, message=FALSE, warning=FALSE}
+load("mothur_phyloseq.RData")
+load("qiime2_phyloseq.RData")
+
+# Random seed set for reproducibility
+set.seed(4831) 
+# Data normalized to 100,000 sequences per sample
+m.norm = rarefy_even_depth(mothur, sample.size=100000)
+q.norm = rarefy_even_depth(qiime2, sample.size=100000)
+```
+
+Relative abundance percentages were calculated for the data.
+```{r eval=TRUE}
+m.percent = transform_sample_counts(m.norm, function(x) 100 * x/sum(x))
+q.percent = transform_sample_counts(q.norm, function(x) 100 * x/sum(x))
+```
+
+The phylum Chloroflexi was chosen.
+```{r eval=TRUE}
+phylum_name_mothur = "Chloroflexi"
+phylum_name_qiime2 = "D_1__Chloroflexi"
+```
+
+# Results
+
+### Change of microbial community structure with depth and oxygen concentration
+#### Alpha-diversity
+
+Shannon diversity index and Chao1 were calculated for the total microbial community across depth and oxygen concentration gradients for both mothur and QIIME2.
+
+```{r eval=TRUE, message=FALSE}
+# Alpha-diversity of total community for mothur
+
+# Calculate Chao1 and Shannon
+m.alpha = estimate_richness(m.norm, measures = c("Chao1", "Shannon"))
+
+# Combine Chao1 and Shannon data with the rest of the geochemical data into 1 data frame
+m.meta.alpha = full_join(rownames_to_column(m.alpha),
+  rownames_to_column(data.frame(m.percent@sam_data)), by = "rowname")
+
+# Save plots for the different combinations (Shannon vs Chao1 across depth vs oxygen)
+m.shannon.depth.plot <- m.meta.alpha %>% 
+  ggplot() +
+    geom_point(aes(x=Depth_m, y=Shannon)) +
+    geom_smooth(method='auto', aes(x=as.numeric(Depth_m), y=Shannon)) +
+    labs(title="mothur", y="Shannon diversity index", x=NULL)
+
+m.chao1.depth.plot <- m.meta.alpha %>% 
+  ggplot() +
+    geom_point(aes(x=Depth_m, y=Chao1)) +
+    geom_smooth(method='auto', aes(x=as.numeric(Depth_m), y=Chao1)) +
+    labs(title="mothur", y="Chao1 richness estimator", x="Depth (m)")
+
+m.shannon.o2.plot <- m.meta.alpha %>% 
+  ggplot() +
+    geom_jitter(aes(x=O2_uM, y=Shannon), width = 5, shape = 1) +
+    labs(title="mothur", y="Shannon diversity index", x=NULL)
+
+m.chao1.o2.plot <- m.meta.alpha %>% 
+  ggplot() +
+    geom_jitter(aes(x=O2_uM, y=Chao1), width = 5, shape = 1) +
+    labs(title="mothur", y="Chao1 richness estimator", x="Oxygen (uM)")
+
+# Alpha-diversity of total community for QIIME2
+
+# Calculate Chao1 and Shannon
+q.alpha = estimate_richness(q.norm, measures = c("Chao1", "Shannon"))
+
+# Combine Chao1 and Shannon data with the rest of the geochemical data into 1 data frame
+q.meta.alpha = full_join(rownames_to_column(q.alpha),
+  rownames_to_column(data.frame(q.percent@sam_data)), by = "rowname")
+
+# Save plots for the different combinations (Shannon vs Chao1 across depth vs oxygen)
+q.shannon.depth.plot <- q.meta.alpha %>% 
+  ggplot() +
+    geom_point(aes(x=Depth_m, y=Shannon)) +
+    geom_smooth(method='loess', aes(x=as.numeric(Depth_m), y=Shannon)) +
+    labs(title="QIIME2", y=NULL, x=NULL)
+
+q.chao1.depth.plot <- q.meta.alpha %>% 
+  ggplot() +
+    geom_point(aes(x=Depth_m, y=Chao1)) +
+    geom_smooth(method='loess', aes(x=as.numeric(Depth_m), y=Chao1)) +
+    labs(title="QIIME2", y=NULL, x="Depth (m)")
+
+q.shannon.o2.plot <- q.meta.alpha %>% 
+  ggplot() +
+    geom_jitter(aes(x=O2_uM, y=Shannon), width = 5, shape = 1) +
+    labs(title="QIIME2", y=NULL, x=NULL)
+
+q.chao1.o2.plot <- q.meta.alpha %>% 
+  ggplot() +
+    geom_jitter(aes(x=O2_uM, y=Chao1), width = 5, shape = 1) +
+    labs(title="QIIME2", y=NULL, x="Oxygen (uM)")
+```
+
+```{r eval=TRUE, message=FALSE}
+# Plotting alpha-diversities versus depth
+grid.arrange(m.shannon.depth.plot, q.shannon.depth.plot, m.chao1.depth.plot, q.chao1.depth.plot, ncol=2)
+```
+  
+**Figure 1**
+Alpha-diversity of samples collected at Saanich Inlet across depth. Sequence processing was done with both mothur and QIIME2. Points were fitted using local polynomial regression fitting. 95% confidence band is displayed in grey.  
+<br>
+
+The same patterns of alpha-diversity (Shannon diversity index and the Chao1 richness estimator) can be observed across depth for both mothur and QIIME2 (Figure 1). There is a slightly lower diversity in surface waters (0m) compared to 100m depth. Peak diversity is reached at ~100-120m then diversity decreases with greater depth, with a slight increase at 200m for all but Shannon diversity index for QIIME2.  
+
+Note, however, that despite the similarity in the alpha-diversity pattern, the comparison of mothur versus QIIME2 shows difference: across all depths, mothur OTU analysis resulted in a lower alpha-diversity than the QIIME2 ASV analysis when measured with the Shannon diversity index and a higher alpha-diversity than the QIIME2 ASV analysis when measured with Chao1.
+
+```{r eval=TRUE, message=FALSE}
+# Plotting alpha-diversities versus oxygen concentration
+grid.arrange(m.shannon.o2.plot, q.shannon.o2.plot, m.chao1.o2.plot, q.chao1.o2.plot, ncol=2)
+```
+  
+**Figure 2**
+Alpha-diversity of samples collected at Saanich Inlet across oxygen concentration. Sequence processing was done with both mothur and QIIME2. Points are jittered to show 2 sets of 2 closely overlapping points revealed by the mothur pipeline.   
+<br>
+
+Looking at Shannon diversity across oxygen concentration (Figure 2), we find that at equivalent depths QIIME2 has a greater diversity than mothur. However, the pattern exhibited by both mothur and QIIME2 data is still similar. The three lowest diversity points are at an oxygen concentration of 0 uM, while the highest diversity is found at an oxygen concentration of ~38 uM. The band of 95% confidence intervals was not plotted due to the lack of data between ~38 uM and ~217 uM of oxygen.   
+
+Comparing Chao1 at different oxygen levels for mothur and QIIME2 shows that the patterns somewhat differ. While the three lowest diversity points are still at 0 uM of oxygen, for mothur the highest diversity in terms of Chao1 is at an oxygen concentration of ~38 uM, while for QIIME2 it is at an oxygen concentration of ~32 uM. For both, oxygen concentration of ~217 uM shows a notable decrease in diversity. Chao1 exhibited a relatively greater drop at ~217 uM of oxygen compared to Shannon.   
+
+#### Taxonomic community composition
+```{r eval=TRUE}
+# Save plot for phylum abundance composition for mothur
+m.phyla.plot = m.percent %>%
+  plot_bar(fill="Phylum")+
+    geom_bar(aes(fill=Phylum), stat="identity")+
+    labs(y="Abundance (%)")+ 
+    scale_fill_manual(values=palette)+ 
+    theme(legend.text=element_text(size=11))
+
+# Save plot for phylum abundance composition for QIIME2
+q.phyla.plot = q.percent %>%
+  plot_bar(fill="Phylum")+
+    geom_bar(aes(fill=Phylum), stat="identity")+
+    labs(y="Abundance (%)")+
+    scale_fill_manual(values=palette)+ 
+    theme(legend.text=element_text(size=11))
+```
+
+```{r eval=TRUE, echo=FALSE, fig.width=9, fig.height=9}
+# Show plot for phylum abundance composition for mothur
+m.phyla.plot
+```
+  
+**Figure 3**
+Relative distribution of phyla across samples from Saanich Inlet when clustered as OTUs using mothur.
+<br>  
+
+```{r eval=TRUE, echo=FALSE, fig.width=9, fig.height=9}
+# Show plot for phylum abundance composition for QIIME2
+q.phyla.plot
+```
+  
+**Figure 4**
+Relative distribution of phyla across samples from Saanich Inlet when clustered as ASVs using QIIME2.  
+<br>
+
+Mothur and QIIME2 identified 28 and 29 taxa, respectively, at the phylum level (Figures 3 & 4). Out of these identified phyla in both mothur and QIIME2, ~4 dominated the community composition in terms of abundance: Proteobacteria, Bacteroidetes, Thaumarchaeota and Actinobacteria (from most to less abundant). Other phyla that are noticeably more abundant include Cyanobacteria, Deferribacteres, Euryarchaeota, Firmiucutes, Gemmatimonadetes, Marinimicrobia, Nitrospinae, Planctomycetes and Verrucomicrobia. Our phylum of interest, Chloroflexi, makes up from 0 to 6% of the microbial community in the collected samples depending on depth.
+ 
+### Chloroflexi abundance with depth and oxygen concentration
+```{r eval=TRUE}
+# Get summary of linear model statistics for Chloroflexi abundance across depth for mothur
+m.chlor.lm = m.norm %>% 
+  subset_taxa(Phylum==phylum_name_mothur) %>% 
+  tax_glom(taxrank = 'Phylum') %>%
+  psmelt() %>%
+  lm(Abundance ~ Depth_m, .) %>% 
+  summary()
+
+# Get summary of linear model statistics for Chloroflexi abundance across depth for QIIME2
+q.chlor.lm = q.norm %>% 
+  subset_taxa(Phylum==phylum_name_qiime2) %>% 
+  tax_glom(taxrank = 'Phylum') %>%
+  psmelt() %>%
+  lm(Abundance ~ Depth_m, .) %>% 
+  summary()
+
+# Make a data frame for linear model statistics data for depth
+taxon.abundance = data.frame("Estimate" = numeric(0), "Std. Error"= numeric(0),"t value"= numeric(0),"Pr(>|t|)"= numeric(0))
+taxon.abundance <- rbind(taxon.abundance, m.chlor.lm$coefficients["Depth_m",])
+taxon.abundance <- rbind(taxon.abundance, q.chlor.lm$coefficients["Depth_m",])
+rownames(taxon.abundance) <- (c("mothur", "QIIME2"))
+colnames(taxon.abundance) <- (c("Estimate", "Std. Error","t value","Pr(>|t|) (p-value)"))
+# Make a table for the data
+kable(taxon.abundance,caption="Table 1 Correlation Data of Chloroflexi Phylum across Depth")
+
+# Filter our phylum, group by sample and summarize abundance across depth for mothur
+m.abd.depth.plot <- m.percent %>% 
+  subset_taxa(Phylum==phylum_name_mothur) %>% 
+  psmelt() %>% 
+  group_by(Sample) %>% 
+  summarize(Abundance_sum=sum(Abundance), Depth_m=mean(Depth_m)) %>% 
+# Use the data in a plot (abundance versus depth)
+ggplot() +
+  geom_point(aes(x=Depth_m, y=Abundance_sum)) +
+  geom_smooth(method='lm', aes(x=as.numeric(Depth_m), y=Abundance_sum)) +
+  labs(title="mothur", y="Abundance (%)", x="Depth (m)")
+
+# Filter our phylum, group by sample and summarize abundance across depth for QIIME2
+q.abd.depth.plot <- q.percent %>% 
+  subset_taxa(Phylum==phylum_name_qiime2) %>% 
+  psmelt() %>% 
+  group_by(Sample) %>% 
+  summarize(Abundance_sum=sum(Abundance), Depth_m=mean(Depth_m)) %>% 
+# Use the data in a plot (abundance versus depth)
+ggplot() +
+  geom_point(aes(x=Depth_m, y=Abundance_sum)) +
+  geom_smooth(method='lm', aes(x=as.numeric(Depth_m), y=Abundance_sum)) +
+  labs(title="QIIME2", y=NULL, x="Depth (m)")
+```
+
+```{r eval=TRUE}
+# Get summary of linear model statistics for Chloroflexi abundance across oxygen concentrations for mothur
+m.chlor.lm.ox = m.norm %>% 
+  subset_taxa(Phylum==phylum_name_mothur) %>% 
+  tax_glom(taxrank = 'Phylum') %>%
+  psmelt() %>%
+  lm(Abundance ~ O2_uM, .) %>% 
+  summary()
+
+# Get summary of linear model statistics for Chloroflexi abundance across oxygen concentrations for QIIME2
+q.chlor.lm.ox = q.norm %>% 
+  subset_taxa(Phylum==phylum_name_qiime2) %>% 
+  tax_glom(taxrank = 'Phylum') %>%
+  psmelt() %>%
+  lm(Abundance ~ O2_uM, .) %>% 
+  summary()
+
+# Make a data frame for linear model statistics data for oxygen concentrations
+taxon.abundance.ox = data.frame("Estimate" = numeric(0), "Std. Error"= numeric(0),"t value"= numeric(0),"Pr(>|t|)"= numeric(0))
+taxon.abundance.ox <- rbind(taxon.abundance.ox, m.chlor.lm.ox$coefficients["O2_uM",])
+taxon.abundance.ox <- rbind(taxon.abundance.ox, q.chlor.lm.ox$coefficients["O2_uM",])
+rownames(taxon.abundance.ox) <- (c("mothur", "QIIME2"))
+colnames(taxon.abundance.ox) <- (c("Estimate", "Std. Error","t value","Pr(>|t|) (p-value)"))
+# Make a table for the data
+kable(taxon.abundance.ox,caption="Table 2 Correlation Data of Chloroflexi Phylum across Oxygen Concentration")
+
+# Filter our phylum, group by sample and summarize abundance across oxygen concentration for mothur
+m.abd.o2.plot <- m.percent %>% 
+  subset_taxa(Phylum==phylum_name_mothur) %>% 
+  psmelt() %>% 
+  group_by(Sample) %>% 
+  summarize(Abundance_sum=sum(Abundance), O2_uM=mean(O2_uM)) %>% 
+# Use the data in a plot (abundance versus oxygen)
+ggplot() +
+  geom_point(aes(x=O2_uM, y=Abundance_sum)) +
+  geom_smooth(method='lm', aes(x=as.numeric(O2_uM), y=Abundance_sum)) +
+  labs(title="mothur", y="Abundance (%)", x="O2 (uM)")
+
+# Filter our phylum, group by sample and summarize abundance across oxygen concentration for QIIME2
+q.abd.o2.plot <- q.percent %>% 
+  subset_taxa(Phylum==phylum_name_qiime2) %>% 
+  psmelt() %>% 
+  group_by(Sample) %>% 
+  summarize(Abundance_sum=sum(Abundance), O2_uM=mean(O2_uM)) %>% 
+# Use the data in a plot (abundance versus oxygen)
+ggplot() +
+  geom_point(aes(x=O2_uM, y=Abundance_sum)) +
+  geom_smooth(method='lm', aes(x=as.numeric(O2_uM), y=Abundance_sum)) +
+  labs(title="QIIME2", y=NULL, x="O2 (uM)")
+```
+
+```{r eval=TRUE, message=FALSE}
+# Plotting Chloroflexi abundance across depth
+grid.arrange(m.abd.depth.plot, q.abd.depth.plot, ncol=2)
+```
+  
+**Figure 5** 
+Relative abundance of Chloroflexi across depth for samples collected at Saanich Inlet. Points are fitted using linear models. 95% confidence bands are displayed in grey.  
+<br>
+
+```{r eval=TRUE, message=FALSE}
+# Plotting Chloroflexi abundance across oxygen concentration
+grid.arrange(m.abd.o2.plot, q.abd.o2.plot, ncol=2)
+```
+  
+**Figure 6** 
+Relative abundance of Chloroflexi across oxygen concentration  for samples collected at Saanich Inlet. Points are fitted using linear models. 95% confidence bands are displayed in grey.  
+<br>
+
+Linear regression analysis of Chloroflexi relative abundance across depth revealed variations between mothur’s OTU and QIIME2’s ASV clustering (Figure 5). Abundance of ASV clusters revealed a significant correlation with depth (p<0.05), while OTU clusters did not (Table 1). Both correlations were found to be positive.
+
+Similarly, linear regression analysis of Chloroflexi relative abundance across oxygen concentration (Figure 6) revealed a significant correlation of oxygen concentration with ASV clusters (p<0.05), but not with OTU clusters (Table 2). Both correlations were found to be negative.
+
+### Richness within the Chloroflexi phylum
+```{r eval=TRUE}
+# Get OTUs taxa
+m.tax_table = data.frame(m.norm@tax_table)
+# Filter out OTUs with our phylum name
+m.filtered = m.tax_table %>% 
+  rownames_to_column('OTU') %>%
+  filter(Phylum==phylum_name_mothur) %>%
+  column_to_rownames('OTU')
+# Get total number of OTUs in Chloroflexi
+m.rownumber = nrow(m.filtered)
+# Get names of classes in OTUs
+m.classes = m.filtered %>%
+  select('Class') %>%
+  unique %>%
+  summarise(Classes = toString(Class))
+
+# Get ASVs taxa
+q.tax_table = data.frame(q.norm@tax_table)
+# Filter out ASVs with our phylum name
+q.filtered = q.tax_table %>% 
+  rownames_to_column('ASV') %>%
+  filter(Phylum==phylum_name_qiime2) %>%
+  column_to_rownames('ASV')
+# Get total number of ASVs in Chloroflexi
+q.rownumber = nrow(q.filtered)
+# Get names of classes in ASVs
+q.classes = q.filtered %>%
+  select('Class') %>%
+  unique %>%
+  summarise(Classes = toString(Class))
+```
+For Chloroflexi, the number of OTUs was found to be `r m.rownumber`, and the number of ASVs was found to be `r q.rownumber`. The OTUs represent classes: `r m.classes[1,1]`, while the ASVs represent classes: `r q.classes[1,1]`.
+
+
+### Change of abundances of OTUs/ASVs within the Chloroflexi phylum with depth and oxygen concentration
+```{r}
+# Example for linear model
+# Make data frame that holds linear model statistics data (OTUs depth)
+otu_stats = data.frame("Estimate" = numeric(0), "Std. Error"= numeric(0),"t value"= numeric(0),"Pr(>|t|)"= numeric(0))
+for (otu in row.names(m.filtered)){
+  linear_fit = m.norm %>% 
+    psmelt() %>% 
+    filter(OTU==otu) %>% 
+
+    lm(Abundance ~ Depth_m, .) %>% 
+    summary()
+  otu_data = linear_fit$coefficients["Depth_m",]
+  otu_stats <- rbind(otu_stats, otu_data)
+}
+colnames(otu_stats)<- (c("Estimate", "Std. Error","t value","Pr(>|t|) (p-value)"))
+# Add OTU names
+row.names(otu_stats) <- row.names(m.filtered)
+# Add class and genus names
+otu_stats = cbind(data.frame(Class = m.filtered$Class), Genus = m.filtered$Genus, otu_stats)
+# Sort data frame by linear model slope (estimate)
+sorted = arrange(rownames_to_column(otu_stats),Estimate)%>% column_to_rownames(var="rowname")
+# Save data table in variable
+lm.depth.otus = kable(sorted,caption="Table A1 Correlation data of Chloroflexi OTUs Abundance with Depth")
+```
+
+```{r fig.width=10, fig.height=10}
+# Example for correlation graph
+# Correlation graph for Chloroflexi OTUs percentage abundance across depth, first filtered for Chloroflexi, then plotted
+m.percent %>% 
+  subset_taxa(Phylum==phylum_name_mothur) %>% 
+  psmelt() %>% 
+  
+  ggplot() +
+  geom_point(aes(x=Depth_m, y=Abundance)) +
+  geom_smooth(method='lm', aes(x=Depth_m, y=Abundance)) +
+  facet_wrap(~OTU, scales="free_y") +
+  labs(x = "Depth (m)", y = "Abundance (%)") +
+  theme(axis.text.x = element_text(angle = 90))
+```
+  
+**Figure 7**
+Relative abundances of Chloroflexi OTUs across depth for samples collected at Saanich Inlet. Points are fitted using linear models. 95% confidence bands are displayed in grey. None of the correlations were found to be significant. The exact p-values for each fit can be found in Table A1.
+<br><br>
+
+```{r echo=FALSE, fig.width=10, fig.height=10}
+# Correlation graph for Chloroflexi ASVs percentage abundance across depth, first filtered for Chloroflexi, then plotted
+q.percent %>% 
+  subset_taxa(Phylum==phylum_name_qiime2) %>% 
+  psmelt() %>% 
+  
+  ggplot() +
+  geom_point(aes(x=Depth_m, y=Abundance)) +
+  geom_smooth(method='lm', aes(x=Depth_m, y=Abundance)) +
+  facet_wrap(~OTU, scales="free_y") +
+  labs(x = "Depth (m)", y = "Abundance (%)") +
+  theme(axis.text.x = element_text(angle = 90))
+```
+  
+**Figure 8**
+Relative abundances of Chloroflexi ASVs across depth for samples collected at Saanich Inlet. Points are fitted using linear models. 95% confidence bands are displayed in grey. None of the correlations were found to be significant. The exact p-values for each fit can be found in Table A2.
+<br><br>
+
+```{r echo=FALSE, fig.width=10, fig.height=10}
+# Correlation graph for Chloroflexi OTUs percentage abundance across oxygen, first filtered for Chloroflexi, then plotted
+m.percent %>% 
+  subset_taxa(Phylum==phylum_name_mothur) %>% 
+  psmelt() %>% 
+  
+  ggplot() +
+  geom_point(aes(x=O2_uM, y=Abundance)) +
+  geom_smooth(method='lm', aes(x=O2_uM, y=Abundance)) +
+  facet_wrap(~OTU, scales="free_y") +
+  labs(x = "O2 (uM)", y = "Abundance (%)") +
+  theme(axis.text.x = element_text(angle = 90))
+```
+
+**Figure 9**
+Relative abundances of Chloroflexi OTUs across oxygen concentration for samples collected at Saanich Inlet. Points are fitted using linear models. 95% confidence bands are displayed in grey. None of the correlations were found to be significant. The exact p-values for each fit can be found in Table A3.
+<br><br>
+
+```{r echo=FALSE, fig.width=10, fig.height=10}
+# Correlation graph for Chloroflexi ASVs percentage abundance across oxygen, first filtered for Chloroflexi, then plotted
+q.percent %>% 
+  subset_taxa(Phylum==phylum_name_qiime2) %>% 
+  psmelt() %>% 
+  
+  ggplot() +
+  geom_point(aes(x=O2_uM, y=Abundance)) +
+  geom_smooth(method='lm', aes(x=O2_uM, y=Abundance)) +
+  facet_wrap(~OTU, scales="free_y") +
+  labs(x = "O2 (uM)", y = "Abundance (%)") +
+  theme(axis.text.x = element_text(angle = 90))
+```
+
+**Figure 10**
+Relative abundances of Chloroflexi ASVs across oxygen concentration for samples collected at Saanich Inlet. Points are fitted using linear models. 95% confidence bands are displayed in grey. None of the correlations were found to be significant. The exact p-values for each fit can be found in Table A4.
+<br><br>
+
+Linear model statistics were performed for the abundance of each OTU and ASV in relation to depth and oxygen concentration (Appendix A Table A1-A4). The linear models were subsequently plotted (Figures 7-10). No significant correlations were found between any individual OTUs/ASVs abundance and depth or oxygen concentration (p > 0.05 for all).
+
+Although none of the correlations were significant, mothur and QIIME2 showed similar trends. For mothur ten of the `r m.rownumber` OTUs had negative correlation between abundance and depth (the rest positive), while for QIIME2 nine of the `r q.rownumber` ASVs had negative correlation between abundance and depth (the rest positive). This was while for abundance versus oxygen concentration, for mothur all OTUs had negative correlation, and for QIIME2 all but one ASVs had negative correlation.
+
+### Change of abundances of OTUs/ASVs within the Chloroflexi phylum with hydrogen sulfide concentration
+
+```{r echo=FALSE, fig.width=10, fig.height=10}
+# Correlation graph for Chloroflexi OTUs percentage abundance across hydrogen sulfide, first filtered for Chloroflexi, then plotted
+m.percent %>% 
+  subset_taxa(Phylum==phylum_name_mothur) %>% 
+  psmelt() %>% 
+  
+  ggplot() +
+  geom_point(aes(x=H2S_uM, y=Abundance)) +
+  geom_smooth(method='lm', aes(x=H2S_uM, y=Abundance)) +
+  facet_wrap(~OTU, scales="free_y") +
+  labs(x = "H2S (uM)", y = "Abundance (%)") + 
+  theme(axis.text.x = element_text(angle = 90))
+```
+
+**Figure 11**
+Relative abundances of Chloroflexi OTUs across hydrogen sulfide concentration for samples collected at Saanich Inlet. Points are fitted using linear models. 95% confidence bands are displayed in grey. Significance of each fit can be found in Table A5.
+<br><br>
+
+
+```{r echo=FALSE, fig.width=10, fig.height=10}
+# Correlation graph for Chloroflexi ASVs percentage abundance across hydrogen sulfide, first filtered for Chloroflexi, then plotted
+q.percent %>% 
+  subset_taxa(Phylum==phylum_name_qiime2) %>% 
+  psmelt() %>% 
+  
+  ggplot() +
+  geom_point(aes(x=H2S_uM, y=Abundance)) +
+  geom_smooth(method='lm', aes(x=H2S_uM, y=Abundance)) +
+  facet_wrap(~OTU, scales="free_y") +
+  labs(x = "H2S (uM)", y = "Abundance (%)") + 
+  theme(axis.text.x = element_text(angle = 90))
+```
+
+**Figure 12**
+Relative abundances of Chloroflexi ASVs across hydrogen sulfide concentration for samples collected at Saanich Inlet. Points are fitted using linear models. 95% confidence bands are displayed in grey. Significance of each fit can be found in Table A6.
+<br><br>
+
+Linear model statistics were performed for the abundance of each OTU and ASV in relation to hydrogen sulfide concentration (Appendix A Table A5 & A6). The linear models were subsequently plotted (Figures 11 & 12). Significant positive correlations between abundance and hydrogen sulfide concentration after p-adjusting were found for 15 and 19 individual OTUs and ASVs, respectively. For OTUs and ASVs, p-values were <0.05. Classes associated with OTUs and ASVs positively correlating with hydrogen sulfide concentration include Anaerolineae, Dehalococcoidia and the SAR202 clade.
+
+QIIME2 identified 9 more individual members of Chloroflexi that significantly and positively correlate with hydrogen sulfide concentration compared to mothur. In addition, the significance of the results and the positive correlation with hydrogen sulfide concentration were generally greater with QIIME2 than mothur. 
+
+# Discussion
+
+The Saanich Inlet provides a good model for the study of oxygen minimum zones and the microbial dynamics that shape them. The microbial diversity analyses we carried out with the two bioinformatic pipelines mothur and QIIME2 resulted in mostly similar patterns, but there were differences when it came to the details. Both pipelines found that the peak Shannon diversity index was at 100 m, however, the peak Chao1 richness estimates for the total community was at a 100 m for mothur and 120 m for QIIME2. We see the same discrepancy between mothur and QIIME2 and their Chao1 richness estimates when looking at alpha-diversity across dissolved oxygen concentrations (Figure 2). As for discrepancies between Shannon diversity and Chao1 richness, we found that at the dissolved oxygen concentration of 217 μm Chao1 was relatively lower than Shannon for both mothur and QIIME2. The lower value of Chao1 compared to Shannon at ~217uM could indicate increased species evenness despite reduced species diversity because Chao1 does not take into account evenness while Shannon does. The two pipelines also agreed that Saanich Inlet is dominated by only 4-5 phyla, with the phylum Chloroflexi making up 0-6% of the microbial community depending on the sample depth.  
+
+The phylum Chloroflexi contains bacteria with different metabolic characteristics, such as aerobic thermophiles, anoxygenic phototrophs, and anaerobic halorespirers which use halogenated organics as electron acceptors [10, 11]. In our analysis, we found that Chloroflexi abundance was positively correlated with depth (Table 1). This may be a result of oxygen concentrations decreasing with depth: a negative correlation between Chloroflexi abundance and oxygen concentrations was also found (Table 2). Interestingly, these results were determined to only be significant in the QIIME2 analysis, but not the mothur analysis. This discrepancy is discussed later and points out that the analysis method, in this case, plays a role in whether our analysis results are significant or not. The results indicate a preference for members of Chloroflexi to inhabit anoxic habitats at depth within Saanich Inlet, which is supported by previously mentioned research on this phylum [11, 16, 21].  Since Chloroflexi encompasses such vastly different classes of bacteria with disparate metabolistic behavior, it is important to note that the diverse classes within this phylum have different requirements for oxygen content, where some of them also thrive in oxic environments [11, 16, 21]. This may explain why the abundance vs. depth and oxygen concentration results with mothur were not significant (Table 1 & 2). However, we only identified a few classes within Chloroflex from our data, and each of those classes appears to be anaerobic [14-18], so the potential outliers might be a result of something else, such as other nutrients. Anoxic oceanic zones such as the deep waters of Saanich Inlet may provide an environment in which anaerobic members of Chloroflexi can be more competitive than other phyla and dominate the microbial population.  
+
+The richness within Chloroflexi highly depends on which bioinformatic pipeline is used for the analysis. Mothur was only able to identify 34 OTUs occupying 2 classes within Chloroflexi, while QIIME2 was able to identify 47 ASVs and 5 classes within Chloroflexi. However, QIIME2 was unable to identify any genera while mothur was (Table A1-3). Therefore, the required depth into the taxonomic tree may dictate which pipeline should be used in future analyses. Correlations between individual OTUs and ASVs within Chloroflexi against depth or oxygen concentration were found to be insignificant (Appendix A Table 1-4). Linear models in Figures 7-10 show similar trends between the individual OTUs and ASV with depth and oxygen concentration, however there are glaring single outlier defying any correlation between the data points. These outliers are present in all analyses but do not occur at the same depths or oxygen levels for the various ASVs and OTUs studied. This may mean that there is no pattern or rationale for their occurrences. More data would allow to either legitimize these data points or confirm them as outliers to either integrate them or exclude them from the results.  
+
+Since members of the Chloroflexi phylum have been associated with sulfur cycling, the hydrogen sulfide levels in Saanich Inlet were investigated in relation to the abundance of members of this phylum [19]. Strong positive and significant correlations were found between various members of the Chloroflexi phylum and hydrogen sulfide concentrations. Classes correlating with hydrogen sulfide levels include Anaerolineae, Dehalococcoidia and the SAR202 clade (Figure 11 & 12, Appendix A Table 5 & 6). These results are supported by previous studies that have identified members of SAR202 cluster belonging to the Chloroflexi phylum to play a major role in the sulfur cycle in the dark water column. Some of these members have pathways for sulfur reduction and could be responsible for the hydrogen sulfide concentrations at depth. As previously stated, they also have the potential to metabolize a variety of organosulfur compounds [19]. In addition, single-cell genomics studies of members of the Dehalococcoidia class within the Chloroflexi phylum highlighted their association with marine sediments and sulfur cycling [13].  
+
+Differences in bioinformatic pipelines for microbial ecology data analysis may result in potential differences in analytical outcomes, and can lead to misidentifying species in different habitats or incorrectly determining trends. As we observed in this study, although mothur and QIIME2 often produced similar patterns, they did not agree on details. While QIIME2 led us to conclude that there was a presence of four classes (plus one uncultured class) of Chloroflexi in our samples, mothur only identified two. These differences are concerning, since depending on the pipeline we use, we might miss organisms we have collected, or we might identify organisms that are in reality not there. Consequently, we can be drawing the wrong conclusions about ecosystems, and the interplay of its inhabitants. Furthermore, whether we find significant correlations can also depend on the pipeline used. While Chloroflexi abundance was found to significantly correlate with depth and oxygen concentration for QIIME2, the correlation was not significant for mothur. In fact, the significances differed by an order of magnitude. This emphasizes the concern that significance in analysis findings may rest upon the usage of different pipelines and clustering paradigms, leading to false-positives and false-negatives. This also highlights the importance of developing objective metrics to gauge the accuracy of both clustering paradigms.  
+
+Differences we observed between the usage of mothur versus QIIME2 to analyse the reads in this study can also be seen in other research. For instance, a study examining the composition of chicken cecum microbiome performed by Allalil *et al.* revealed lower phylogenetic diversity (PD) values when UPARSE pipelines were used in comparison to de novo QIIME pipelines and open reference QIIME pipelines [25]. However, Species Richness (S) values were comparable when comparing different pipelines. In addition, the number of assigned sequences for different sequencing platform runs were impacted because of OTU picking using different pipelines: De novo vs. open reference QIIME pipelines. The QIIME pipelines generated different relative abundance of specific genera in comparison to UPARSE. Moreover, differences in the detection profiles, such as the number of unique species, were observed when using different pipelines. The number of OTUs and taxonomic assignments produced and identified differed between pipelines with a 99% similarity threshold.  
+
+Since multiple classes were identified under the order Chloroflexi and variations in the directions of correlation with depth were observed for several clusters, future analyses may find more meaning at a sub-phylum level. Additionally, more data were obtained than were analyzed in the current report. In the future, one could look for correlations of abundance across the other factors, such as temperature or salinity, not just depth, oxygen concentration, and hydrogen sulfide. Furthermore, there is a gap in the data between the depth of 10m and depth of 100m, which makes it difficult to determine correlations. More consistent data collection with more samples and at more regular intervals could help alleviate such problems, and potentially show significant correlations. Analysis of data available from the collection of samples over time could be interesting in exploring how the diversity in the area changes over seasons, or over longer time periods, such as decades. It could also be of interest, for any unknown, or not very well known, organisms to look into more details of their genetic make up in order to determine what roles, if any, they might play in biogeochemical cycles.
+
+# References
+
+[1] Zaikova E., Walsh DA, Stilwell CP, Mohn WW, Tortell PD, Hallam SJ. 2010. Microbial community dynamics in a seasonally anoxic fjord: Saanich Inlet, British Columbia. Environmental Microbiology 12:172-191. 
+
+[2] Herlinveaux RH. 2011. Journal of the Fisheries Research Board of Canada 19: 1-37.
+
+[3] 2012. Saanich Inlet. MicrobeWiki.  
+
+[4] Oxygen Minimum Zones. Keil Lab: Aquatic Organic Geochemistry, UW Oceanography. 
+
+[5] 2014. OMZ Microbes - A SCOR working group. 
+
+[6] Blaxter M, Mann J, Chapman T, Thomas F, Whitton C, Floyd R, Abebe E. 2005. Defining operational taxonomic units using DNA barcode data. Philosophical Transactions of the Royal Society B: Biological Sciences 360: 1935–1943.
+
+[7] Callahan BJ, Mcmurdie PJ, Holmes SP. 2017. Exact sequence variants should replace operational taxonomic units in marker gene data analysis. Multidisciplinary Journal of Microbial Ecology 11: 2639–2643.
+
+[8] Schmidt TSB, Rodrigues JFM, Christian M. 2014. Ecological Consistency of SSU rRNA-Based Operational Taxonomic Units at a Global Scale. PLoS Comput Biol. 10. 
+
+[9] Wang, Y., Sheng, H., He, Y., Wu, J., Jiang, Y., Tam, N. F., & Zhou, H. 2012. Comparison of the levels of bacterial diversity in freshwater, intertidal wetland, and marine sediments by using millions of illumina tags. Applied and Environmental Microbiology 78: 8264-8271. 10.1128/AEM.01821-12 
+
+[10] Thiel V, Hamilton TL, Tomsho LP, Burhans R, Gay SE, Schuster SC, et al. 2014. Draft genome sequence of a sulfide-oxidizing, autotrophic filamentous anoxygenic phototrophic bacterium, Chloroflexus sp. strain MS-G (Chloroflexi). Genome Announc 2: 9–10.
+
+[11] Sekiguchi Y, Yamada T, Hanada S, Ohashi A, Harada H, Kamagata Y. 2003. Anaerolinea thermophila gen. nov., sp. nov. and Caldilinea aerophila gen. nov., sp. nov., novel filamentous thermophiles that represent a previously uncultured lineage of the domain bacteria at the subphylum level. Int J Syst Evol Microbiol 53: 1843–51.
+
+[12] Kiss H, Nett M, Domin N, Martin K, Maresca JA, Copeland A, Lapidus A, Lucas S, Berry KW, Rio TGD, Dalin E, Tice H, Pitluck S, Richardson P, Bruce D, Goodwin L, Han C, Detter JC, Schmutz J, Brettin T, Land M, Hauser L, Kyrpides NC, Ivanova N, Göker M, Woyke T, Klenk H-P, Bryant DA. 2011. Complete genome sequence of the filamentous gliding predatory bacterium Herpetosiphon aurantiacus type strain (114-95T). Standards in Genomic Sciences 5: 356–370.
+
+[13] Wasmund K, Cooper M, Schreiber L, Lloyd KG, Baker BJ, Petersen DG, Jørgensen BB, Stepanauskas R, Reinhardt R, Schramm A, Loy A, Adrian L. 2016. Single-Cell Genome and Group-SpecificdsrABSequencing Implicate Marine Members of the ClassDehalococcoidia(PhylumChloroflexi) in Sulfur Cycling. mBio 7.
+
+[14] Biderre-Petit C, Dugat-Bony E, Mege M, Parisot N, Adrian L, Moné A, Denonfoux J, Peyretaillade E, Debroas D, Boucher D, Peyret P. 2016. Distribution of Dehalococcoidia in the Anaerobic Deep Water of a Remote Meromictic Crater Lake and Detection of Dehalococcoidia-Derived Reductive Dehalogenase Homologous Genes. Plos One 11.
+
+[15] Hugenholtz, P., Goebel, B. M., & Pace, N. R. 1998. Impact of culture-independent studies on the emerging phylogenetic view of bacterial diversity. Journal of Bacteriology 18: 4765-4774.
+
+[16] Xia Y, Wang Y, Wang Y, Chin FYL, Zhang T. 2016. Cellular adhesiveness and cellulolytic capacity in Anaerolineae revealed by omics-based genome interpretation. Biotechnology for Biofuels 9.
+
+[17] Giovannoni SJ, Rappe MS, Vergin KL, Adair NL. 1996. 16S rRNA genes reveal stratified open ocean bacterioplankton populations related to the Green Non-Sulfur bacteria. Proceedings of the National Academy of Sciences 93:7979–7984.
+
+[18] Morris RM, Rappé MS, Urbach E, Connon SA, Rappe MS, Giovannoni SJ. 2004. Prevalence of the Chloroflexi-related SAR202 bacterioplankton cluster throughout the mesopelagic zone and deep ocean. Appl Environ Microbiol 70: 2836–42.
+
+[19] Mehrshad M, Rodriguez-Valera F, Amoozegar MA, López-García P, Ghai R. 2017. The enigmatic SAR202 cluster up close: shedding light on a globally distributed dark ocean lineage involved in sulfur cycling. The ISME Journal 12: 655–668.
+
+[20] Wegner C-E, Liesack W. 2017. Unexpected Dominance of Elusive Acidobacteria in Early Industrial Soft Coal Slags. Frontiers in Microbiology 8.
+
+[21] Ye Q, Wu Y, Zhu Z, Wang X, Li Z, Zhang J. 2016. Bacterial diversity in the surface sediments of the hypoxic zone near the Changjiang Estuary and in the East China Sea. MicrobiologyOpen 5: 323–339.
+
+[22] Torres-Beltrán M, Hawley AK, Capelle D, Zaikova E, Walsh DA, Mueller A, Scofield M, Payne C, Pakhomova L, Kheirandish S, Finke J, Bhatia M, Shevchuk O, Gies EA, Fairley D, Michiels C, Suttle CA, Whitney F, Crowe SA, Tortell PD, Hallam SJ. 2017. A compendium of geochemical information from the Saanich Inlet water column. Sci Data 4: 170159.
+
+
+[23] Hawley AK, Torres-Beltrán M, Zaikova E, Walsh DA, Mueller A, Scofield M, Kheirandish S, Payne C, Pakhomova L, Bhatia M, Shevchuk O, Gies EA, Fairley D, Malfatti SA, Norbeck AD, Brewer HM, Pasa-Tolic L, del Rio TG, Suttle CA, Tringe S, Hallam SJ. 2017. A compendium of multi-omic sequence information from the Saanich Inlet water column. Sci Data 4: 170160.
+
+[24] R Core Team. 2017. R: A language and environment for statistical computing. 3.4.3. R Foundation for Statistical Computing, Vienna, Austria.
+
+[25] Allali I, Arnold J.W., Roach J, Cadenas M.B., Butz N, Hassan H.M., Koci M, Ballou A, Mendoza M, Ali R, Azcarate-Peril M.A. 2017. A comparison of sequencing platforms and bioinformatics pipelines for compositional analysis of the gut microbiome. BMC Microbiology 17: 1-16. 
+
+
+
+# Appendices
+
+## Appendix A: Correlation of Chloroflexi OTUs/ASVs Abundance with Depth, Oxygen Concentration, and Hydrogen Sulfide Concentration
+
+```{r echo=FALSE}
+# Show saved table for linear models statistics data (OTUs depth)
+lm.depth.otus
+```
+
+```{r echo=FALSE}
+# Make data frame that holds linear model statistics data (ASVs depth)
+asv_stats = data.frame("Estimate" = numeric(0), "Std. Error"= numeric(0),"t value"= numeric(0),"Pr(>|t|)"= numeric(0))
+for (otu in row.names(q.filtered)){
+  linear_fit = q.norm %>% 
+    psmelt() %>% 
+    filter(OTU==otu) %>% 
+
+    lm(Abundance ~ Depth_m, .) %>% 
+    summary()
+  asv_data = linear_fit$coefficients["Depth_m",]
+  asv_stats <- rbind(asv_stats, asv_data)
+}
+colnames(asv_stats)<- (c("Estimate", "Std. Error","t value","Pr(>|t|) (p-value)"))
+# Add ASV names
+row.names(asv_stats) <- row.names(q.filtered)
+# Add class and genus names
+asv_stats = cbind(data.frame(Class = q.filtered$Class), Genus = q.filtered$Genus, asv_stats)
+# Sort data frame by linear model slope (estimate)
+sorted = arrange(rownames_to_column(asv_stats),Estimate)%>% column_to_rownames(var="rowname")
+# Make table for data
+kable(sorted,caption="Table A2 Correlation Data of Chloroflexi ASVs Abundance with Depth")
+```
+
+```{r echo=FALSE}
+# Make data frame that holds linear model statistics data (OTUs oxygen)
+otu_stats = data.frame("Estimate" = numeric(0), "Std. Error"= numeric(0),"t value"= numeric(0),"Pr(>|t|)"= numeric(0))
+for (otu in row.names(m.filtered)){
+  linear_fit = m.norm %>% 
+    psmelt() %>% 
+    filter(OTU==otu) %>% 
+
+    lm(Abundance ~ O2_uM, .) %>% 
+    summary()
+  otu_data = linear_fit$coefficients["O2_uM",]
+  otu_stats <- rbind(otu_stats, otu_data)
+}
+colnames(otu_stats)<- (c("Estimate", "Std. Error","t value","Pr(>|t|) (p-value)"))
+# Add OTU names
+row.names(otu_stats) <- row.names(m.filtered)
+# Add class and genus names
+otu_stats = cbind(data.frame(Class = m.filtered$Class), Genus = m.filtered$Genus, otu_stats)
+# Sort data frame by linear model slope (estimate)
+sorted = arrange(rownames_to_column(otu_stats),Estimate)%>% column_to_rownames(var="rowname")
+# Make table for data
+kable(sorted,caption="Table A3 Correlation Data of Chloroflexi OTUs Abundance with Oxygen Concentration")
+```
+
+```{r echo=FALSE}
+# Make data frame that holds linear model statistics data (ASVs oxygen)
+asv_stats = data.frame("Estimate" = numeric(0), "Std. Error"= numeric(0),"t value"= numeric(0),"Pr(>|t|)"= numeric(0))
+for (otu in row.names(q.filtered)){
+  linear_fit = q.norm %>% 
+    psmelt() %>% 
+    filter(OTU==otu) %>% 
+
+    lm(Abundance ~ O2_uM, .) %>% 
+    summary()
+  asv_data = linear_fit$coefficients["O2_uM",]
+  asv_stats <- rbind(asv_stats, asv_data)
+}
+colnames(asv_stats)<- (c("Estimate", "Std. Error","t value","Pr(>|t|) (p-value)"))
+# Add ASV names
+row.names(asv_stats) <- row.names(q.filtered)
+# Add class and genus names
+asv_stats = cbind(data.frame(Class = q.filtered$Class), Genus = q.filtered$Genus, asv_stats)
+# Sort data frame by linear model slope (estimate)
+sorted = arrange(rownames_to_column(asv_stats),Estimate)%>% column_to_rownames(var="rowname")
+# Make table for data
+kable(sorted,caption="Table A4 Correlation Data of Chloroflexi ASVs Abundance with Oxygen Concentration")
+```
+
+```{r echo=FALSE}
+otu_stats = data.frame("Estimate" = numeric(0), "Std. Error"= numeric(0),"t value"= numeric(0),"Pr(>|t|)"= numeric(0))
+for (otu in row.names(m.filtered)){
+  linear_fit = m.norm %>% 
+    psmelt() %>% 
+    filter(OTU==otu) %>% 
+
+    lm(Abundance ~ H2S_uM, .) %>% 
+    summary()
+  otu_data = linear_fit$coefficients["H2S_uM",]
+  otu_stats <- rbind(otu_stats, otu_data)
+}
+# Adjust p-values
+otu_stats = cbind(otu_stats, p.adjust(otu_stats[,4], "fdr"))
+colnames(otu_stats)<- (c("Estimate", "Std. Error","t value","Pr(>|t|) (p-value)","FDR Adjusted p-value"))
+# Add OTU names
+row.names(otu_stats) <- row.names(m.filtered)
+# Add class and genus names
+otu_stats = cbind(data.frame(Class = m.filtered$Class), Genus = m.filtered$Genus, otu_stats)
+# Sort data frame by linear model slope (estimate)
+sorted = arrange(rownames_to_column(otu_stats),Estimate)%>% column_to_rownames(var="rowname")
+# Make table for data
+kable(sorted,caption="Table A5 Correlation Data of Chloroflexi OTUs Abundance with Hydrogen Sulfide Concentration")
+```
+
+```{r echo=FALSE}
+asv_stats = data.frame("Estimate" = numeric(0), "Std. Error"= numeric(0),"t value"= numeric(0),"Pr(>|t|)"= numeric(0))
+for (otu in row.names(q.filtered)){
+  linear_fit = q.norm %>% 
+    psmelt() %>% 
+    filter(OTU==otu) %>% 
+
+    lm(Abundance ~ H2S_uM, .) %>% 
+    summary()
+  asv_data = linear_fit$coefficients["H2S_uM",]
+  asv_stats <- rbind(asv_stats, asv_data)
+}
+# Adjust p-values
+asv_stats = cbind(asv_stats, p.adjust(asv_stats[,4], "fdr"))
+colnames(asv_stats)<- (c("Estimate", "Std. Error","t value","Pr(>|t|) (p-value)","FDR Adjusted p-value"))
+# Add ASV names
+row.names(asv_stats) <- row.names(q.filtered)
+# Add class and genus names
+asv_stats = cbind(data.frame(Class = q.filtered$Class), Genus = q.filtered$Genus, asv_stats)
+# Sort data frame by linear model slope (estimate)
+sorted = arrange(rownames_to_column(asv_stats),Estimate)%>% column_to_rownames(var="rowname")
+# Make table for data
+kable(sorted,caption="Table A6 Correlation Data of Chloroflexi ASVs Abundance with Hydrogen Sulfide Concentration")
+```
+

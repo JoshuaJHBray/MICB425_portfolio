@@ -1,0 +1,3 @@
+# Functional analysis, nitric oxide reductase subunit C:
+
+Placement weight 100.0%: Assignment of query to uncultured SUP05 cluster bacterium | EEZ80580.1 (192).

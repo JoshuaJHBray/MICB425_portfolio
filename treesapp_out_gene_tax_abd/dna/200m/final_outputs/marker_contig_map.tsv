@@ -1,0 +1,10 @@
+Query	Marker	Taxonomy	Confident_Taxonomy	Abundance	Likelihood	WTD
+scaffold92654	norC	Bacteria; Proteobacteria; Epsilonproteobacteria; Campylobacterales; Helicobacteraceae; Sulfurimonas; Sulfurimonas autotrophica	Bacteria; Proteobacteria; Epsilonproteobacteria; Campylobacterales; Helicobacteraceae; Sulfurimonas	2.00953	0.303851	0.0
+scaffold04729	norC	Bacteria; Proteobacteria; Gammaproteobacteria	Bacteria; Proteobacteria; Gammaproteobacteria	62.8511	0.364253	0.07118
+scaffold01851	norC	Bacteria; Firmicutes; Clostridia; Clostridiales; Peptococcaceae	Bacteria; Firmicutes; Clostridia; Clostridiales; Peptococcaceae	6.72581	0.269539	0.0875
+scaffold07199	norC	Bacteria; Proteobacteria; Gammaproteobacteria	Bacteria; Proteobacteria; Gammaproteobacteria	62.4635	0.985478	0.03906
+scaffold00982	norC	Bacteria; Proteobacteria; Gammaproteobacteria; Thiotrichales; unclassified Thiotrichales; unclassified Thiotrichales 	Bacteria; Proteobacteria; Gammaproteobacteria; Thiotrichales; unclassified Thiotrichales; unclassified Thiotrichales 	12.0729	0.657698	0.0
+scaffold32669	norC	Bacteria; Proteobacteria; Gammaproteobacteria	Bacteria; Proteobacteria; Gammaproteobacteria	45.3144	0.985823	0.03906
+scaffold66556	norC	Bacteria; Proteobacteria; Gammaproteobacteria; unclassified Gammaproteobacteria; sulfur-oxidizing symbionts; endosymbiont of Tevnia jerichonana	Bacteria; Proteobacteria; Gammaproteobacteria; unclassified Gammaproteobacteria; sulfur-oxidizing symbionts; endosymbiont of Tevnia jerichonana	9.92802	0.699591	0.0
+scaffold03309	norC	Bacteria; Proteobacteria; Gammaproteobacteria; unclassified Gammaproteobacteria; Candidatus Thioglobus; environmental samples	Bacteria; Proteobacteria; Gammaproteobacteria; unclassified Gammaproteobacteria; Candidatus Thioglobus; environmental samples	166.948	1.0	0.0
+scaffold01477	norC	Bacteria; Proteobacteria; Gammaproteobacteria	Bacteria; Proteobacteria; Gammaproteobacteria	23.395	0.631856	0.03906

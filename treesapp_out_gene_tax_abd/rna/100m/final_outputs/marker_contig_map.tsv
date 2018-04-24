@@ -1,0 +1,15 @@
+Query	Marker	Taxonomy	Confident_Taxonomy	Abundance	Likelihood	WTD
+scaffold00027	norC	Bacteria; Proteobacteria; Gammaproteobacteria	Bacteria; Proteobacteria; Gammaproteobacteria	0.0588806	0.987262	0.03906
+scaffold12720	norC	Bacteria; Chloroflexi; Ardenticatenia; Ardenticatenales; Ardenticatenaceae; Ardenticatena	Bacteria; Chloroflexi; Ardenticatenia; Ardenticatenales; Ardenticatenaceae; Ardenticatena	5.94856	0.996465	0.0
+scaffold06775	norC	Bacteria; Bacteroidetes; Flavobacteriia; Flavobacteriales; Flavobacteriaceae; Aequorivita	Bacteria; Bacteroidetes; Flavobacteriia; Flavobacteriales; Flavobacteriaceae; Aequorivita	0.413603	0.837626	0.0
+scaffold174485	norC	Bacteria; Proteobacteria; Epsilonproteobacteria; Campylobacterales	Bacteria; Proteobacteria; Epsilonproteobacteria; Campylobacterales	0	0.863103	0.06473
+scaffold02477	norC	Bacteria; Proteobacteria; Gammaproteobacteria	Bacteria; Proteobacteria; Gammaproteobacteria	0.0736008	0.986619	0.03906
+scaffold102850	norC	Bacteria; Chloroflexi; Ardenticatenia; Ardenticatenales; Ardenticatenaceae; Ardenticatena	Bacteria; Chloroflexi; Ardenticatenia; Ardenticatenales; Ardenticatenaceae; Ardenticatena	1.43849	0.995553	0.0
+scaffold206609	norC	Bacteria; Bacteroidetes; unclassified Bacteroidetes; unclassified Bacteroidetes 	Bacteria; Bacteroidetes; unclassified Bacteroidetes; unclassified Bacteroidetes 	0	0.737924	0.0
+scaffold00229	norC	Bacteria; Proteobacteria; Gammaproteobacteria	Bacteria; Proteobacteria; Gammaproteobacteria	2.11901	0.364253	0.07118
+scaffold00505	norC	Bacteria; Proteobacteria; Epsilonproteobacteria; Campylobacterales	Bacteria; Proteobacteria; Epsilonproteobacteria; Campylobacterales	0.671317	0.811961	0.06473
+scaffold01220	norC	Bacteria; Chloroflexi; Ardenticatenia; Ardenticatenales; Ardenticatenaceae; Ardenticatena	Bacteria; Chloroflexi; Ardenticatenia; Ardenticatenales; Ardenticatenaceae; Ardenticatena	5.16409	0.996305	0.0
+scaffold58388	norC	Bacteria; Bacteroidetes; unclassified Bacteroidetes; unclassified Bacteroidetes 	Bacteria; Bacteroidetes; unclassified Bacteroidetes; unclassified Bacteroidetes 	0.162062	0.730461	0.0
+scaffold05790	norC	Bacteria; Proteobacteria; Gammaproteobacteria; unclassified Gammaproteobacteria; Candidatus Thioglobus; environmental samples	Bacteria; Proteobacteria; Gammaproteobacteria; unclassified Gammaproteobacteria; Candidatus Thioglobus; environmental samples	0.167312	1.0	0.0
+scaffold03947	norC	Bacteria; Proteobacteria; Epsilonproteobacteria; Campylobacterales	Bacteria; Proteobacteria; Epsilonproteobacteria; Campylobacterales	1.53813	0.564167	0.06473
+scaffold163246	norC	Bacteria; Proteobacteria; Epsilonproteobacteria; Campylobacterales	Bacteria; Proteobacteria; Epsilonproteobacteria; Campylobacterales	0	0.336101	0.06473
