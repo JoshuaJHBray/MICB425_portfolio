@@ -1,0 +1,59 @@
+---
+title: "Project 01 self-assessment of contributions"
+subtitle: "2018 Term 2 - MICB425"
+output: html_document
+---
+To facilitate group assessment, please indicate your contributions to the following aspects of your final group reports. You should provide short statements under the headers relevant to your work. For example, you could specify that you "wrote the first draft", "wrote the code to accomplish X figure or result", "troubleshot code", "interpreted results", etc.
+
+Include **separate** completed versions of this document for Project 1 **and** Project 2 in your portfolio repo; they do not need to be incorporated into the final knit portfolio html.
+
+## Abstract
+### Writing
+
+### Editing
+
+Minor editing.
+## Introduction
+### Literature research
+I did the majority of literature research into the phylum chloroflexi and the classes within chloroflexi.  
+
+### Writing
+
+I wrote two of the paragraphs. 
+
+### Editing
+
+Minor editing accross all parts of the introduction.
+
+## Methods
+### Writing
+
+### Editing
+
+
+## Results
+### Anaysis 
+
+I indepently reviewed and analyzed our results in order to write parts of the discussion.  
+
+### Figures
+
+I contributed minor coding assistance, specifically regarding the presentation of some of the figures.
+
+### Writing
+
+### Editing
+
+
+## Discussion
+### Literature research
+
+Further research into Chloroflexi and the phylum within it.
+
+### Writing
+
+I contributed multiple paragraphs within the discussion.
+
+### Editing
+
+Minor editing of the entire discussion.

@@ -1,0 +1,57 @@
+---
+title: "Project 02 self-assessment of contributions"
+subtitle: "2018 Term 2 - MICB425"
+output: html_document
+---
+To facilitate group assessment, please indicate your contributions to the following aspects of your final group reports. You should provide short statements under the headers relevant to your work. For example, you could specify that you "wrote the first draft", "wrote the code to accomplish X figure or result", "troubleshot code", "interpreted results", etc.
+
+Include **separate** completed versions of this document for Project 1 **and** Project 2 in your portfolio repo; they do not need to be incorporated into the final knit portfolio html.
+
+## Abstract
+### Writing
+
+### Editing
+
+Minor edits.
+
+## Introduction
+### Literature research
+
+### Writing
+
+I made further additions to parts of the introduction as required. 
+
+### Editing
+
+Decent amount of editing.
+
+## Methods
+### Writing
+
+### Editing
+
+
+## Results
+### Anaysis 
+
+Independently analyzed our results to compose parts of the discussion.
+
+### Figures
+
+### Writing
+
+### Editing
+
+
+## Discussion
+### Literature research
+
+Significant time was spent researching *norC* and the various other parts of the nitrogen network/cycle. Also spent a small amount of time researching into the classes and families that were found to express *norC*.
+
+### Writing
+
+Wrote the first draft for the sections relating our *norC* results to a broader view of denitrification. This section was re-iterated upon multiple time, primarily by Miguel and myself, but other members also contributed. I also wrote the section on *norC*-containing species. 
+
+### Editing
+
+Extensive editing on the sections I contributed to, with minor editing of the other sections. 
